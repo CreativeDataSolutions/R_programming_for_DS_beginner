@@ -1,0 +1,498 @@
+# Plotting for data analysis
+
+```{r,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
+```
+
+![DALL·E 2023-04-12 21.07.04 - hydra with five heads, each head is a plot of a data frame using ggplot, cyberpunk, pie chart, bar graph](imgs/data_visualization.png)
+
+While `R` is often described as a \~niche programming language (e.g. for statistics and bioinformatics), it shines for data visualization compared to other data analysis appropriate mainstream alternatives like `python` and `julia`. A major reason for this distinction is the `ggplot2` library and its support for the grammar of graphics, an expressive, composable and extensible way to build data visualizations.
+
+## `ggplot2`
+
+The [`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html) library supports rich combinations of graphical layers `geoms`, statistically derived layers, annotations, scales and aesthetic controls (just to name a few of its [features](https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf)).
+
+Next lets spend some time learning how to prepare and plot our data using `ggplot2`.
+
+```{r,message=FALSE}
+library(ggplot2)
+library(dplyr)
+#load a demo data set
+data(mtcars)
+```
+
+Lets visualize the relationship between data features and miles per gallon `mpg`. First, lets pick and arbitrary variable and explore how it relates to `mpg`.
+
+```{r}
+
+mtcars %>%
+  ggplot(.,aes(x=cyl,y=mpg))
+
+# # # we could also assign our plot to some variable and add to it later
+# p<-mtcars %>%
+#   ggplot(.,aes(x=cyl,y=mpg))
+# 
+# p # render plot
+# p +
+#   ggtitle('Descriptive title goes here')
+
+```
+
+The first layer loads the data and global aesthetics (`aes`). The `aes` are an expressive way to define which data columns are plotted as `x`, `y` coordinates, `colors`, `size`, `groups`, etc.
+
+## Scatter plot
+
+This plot does not show anything yet because we have not defined any layers to show (e.g. points or lines). Lets create a `scatter plot` showing the points with x and y positions defined by two columns in the data.
+
+```{r}
+mtcars %>% 
+  ggplot(.,aes(x=cyl,y=mpg)) +
+  geom_point()
+
+```
+
+## Box plot
+
+Since we are plotting a categorical variable against a numeric variable using a `box plot` might be more informative. We can also change the default theme of the global plot.
+
+```{r}
+
+mtcars %>%
+  ggplot(.,aes(x=cyl,y=mpg,group=cyl)) + # the group is used to define if we want to create a seperate boxplot for each level in a column i.e. category
+  geom_boxplot() +
+  theme_minimal()
+
+```
+
+This is just the beginning of possibilities using `ggplot2`. ![](imgs/ggplot_cheatsheet.png)
+
+## Heatmap
+
+It might be interesting to quantify and plot how all variables are `correlated` with `mpg`. Lets calculate non-parametric `spearman` correlations and show the results as a heatmap. Note, many custom libraries exist just for this task (e.g. [heatmaply](https://cran.r-project.org/web/packages/heatmaply/vignettes/heatmaply.html)).
+
+```{r}
+corr<-cor(mtcars,method = "spearman")
+
+#reshape the data into a 'melted' or long format
+library(reshape2)
+melted_corr <- melt(corr)
+head(melted_corr)
+
+#plot
+ggplot(data = melted_corr, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile()
+
+```
+
+To improve this visualization we may want to sort the plot dimensions (rows and columns) (e.g. using hierarchical clustering), only show a portion of the symmetric matrix (e.g. upper triangle) or change the color scales (e.g. change the color and only show correlations with p-value\<= 0.05).
+
+Lets show part of the square symmetric correlation matrix and improve the color scales.
+
+```{r}
+
+#plot the upper triangle
+corr[upper.tri(corr)]<-0# set to zero the opposite quadrant you want to show, the plot will flip the symmetric values
+melted_corr<-melt(corr)
+
+ggplot(data = melted_corr, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", # specify color gradient
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Spearman\nCorrelations") + #add color to the element legend. Note this can also be done more generically using ggtitle().
+  theme_minimal()+ 
+  # remove axis labels
+  ylab('') +
+  xlab('') +
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 12, hjust = 1)) + #rotate x-axis labels 45 degrees
+ coord_fixed()
+
+```
+
+This is starting to look nice but we can better group related correlation patterns. We can do this using hierarchical clustering. The simplest way to do this is using the `heatmaply` `R` library.
+
+```{r,message=FALSE}
+library(heatmaply)
+
+corr<-cor(mtcars,method = "spearman")
+### Let's Plot
+heatmaply_cor(x = corr,
+              xlab = "Features",
+              ylab = "Features",
+              k_col = 2,
+              k_row = 2)
+```
+
+## Plotly
+
+One thing to notice is that the previous plot is interactive, which is achieved using the `plotly` library. We can convert any `ggplot2` plot into an interactive `plotly` plot. Lets interactively explore another variable's correlation with `mpg`.
+
+```{r,message=FALSE}
+library(plotly)
+
+p<-mtcars %>% 
+  ggplot(.,aes(x=disp,y=mpg)) +
+  stat_smooth(method = 'lm') + #show linear model fit
+  stat_smooth(method = 'loess') + #loess model fit (non-linear)
+  geom_point() + 
+  theme_minimal()
+
+ggplotly(p)
+```
+
+Note the [ggpmisc](https://github.com/aphalo/ggpmisc) library offers convenience functions to plot the model coefficients and variance explained (R\^2). Note the figure below is not based on the `mtcars` data set.
+
+![](https://raw.githubusercontent.com/aphalo/ggpmisc/main/man/figures/README-readme-04-1.png)
+
+## Linear model
+
+Next it might be interesting to visualize how `cyl` impacts the relationship between `disp`and `mpg`.
+
+```{r}
+p<-mtcars %>% 
+  mutate(cyl=as.factor(cyl)) %>% # convert to a factor to create sepearte models
+  ggplot(.,aes(x=disp,y=mpg,color=cyl)) +
+  stat_smooth(method = 'lm') + #show linear model fit
+  geom_point() + 
+  theme_minimal()
+
+ggplotly(p)
+```
+
+This suggests that `mpg` is best explained by the combination of `disp` and `cyl`. We can check this by making our own linear model.
+
+```{r}
+
+
+mod<-lm(mpg ~ disp ,data=mtcars)
+summary(mod)
+
+
+mod2<-lm(mpg ~ disp + cyl +disp:cyl,data=mtcars)
+summary(mod2)
+
+#compare models
+anova(mod, mod2, test="Chisq") # p-value denotes if the residual sum of squares are statistically significant (e.g. one model is better)
+```
+
+We can compare all possible linear models.
+
+```{r}
+summary(mod <- lm(mpg ~ ., data = mtcars))
+smod <- step(mod,direction = 'both')
+summary(smod)
+```
+
+## Model optimization
+
+This a great data driven approach to hone in on the important variables to explain an objective of interest. Lets tune a scatter plot to best show the optimal model insights. We can use the model coefficient weights to prioritize what we show in the different layers. Lets first take a closer look at the variables.
+
+```{r}
+
+mtcars %>% 
+  select(one_of(c('mpg','wt','qsec','am'))) %>%
+  head()# we can see am should be categorical
+
+```
+
+Looking at the variable `types` and `levels` in each category is helpful to decide which `aes` is best suited to visualize each dimension.
+
+```{r,warning=FALSE,message=FALSE}
+mtcars %>% 
+ ggplot(.,aes(x=wt,y=mpg,size=qsec)) +
+  geom_point() +
+  facet_grid(.~am) +
+  stat_smooth(method='lm',show.legend = FALSE) +
+  theme_minimal()
+         
+```
+
+### Scatter plot matrix
+
+We can visualize all bivariate variable relationships using a `scatter plot matrix`.
+
+```{r}
+library(GGally)
+library(plotly)
+data<-mtcars %>%
+  select(one_of(c('mpg','wt','qsec','am'))) %>%
+  mutate(am=as.factor(am))
+
+p <- ggpairs(data, ggplot2::aes(colour=am) ) 
+
+ggplotly(p)
+
+```
+
+Visualizing multivariate model term relationships can be useful to fine tune model interaction terms.
+
+```{r}
+mod3<-lm(mpg ~ wt * am * qsec, data=mtcars)
+summary(mod3)
+```
+
+When we see a better fitting model based on `Adjusted R-squared` it is useful to consider the \~stability of the model coefficients. We can do this by comparing the coefficient weight relative to its standard deviation. We can do this based on the `variance inflation factor`.
+
+```{r}
+library(car)
+(mod3_vif<-vif(mod3))
+(smod_vif<-vif(smod))
+```
+
+Model parameter weights with high `vif` suggest small changes in future data (e.g. another data set) will greatly influence the model predictions. While this is an exercise for another time, one could undertake it by sampling from the original data and adding some error to create `synthetic test data` then comparing predictions of `mpg` given this data between different models.
+
+### Dumbbell plot
+
+Lastly lets use the skills we learned so far to visualize the individual model `vif` values. One idea could be to create a dumbbell plot comparing two model's values.
+
+```{r}
+library(ggplot2)
+library(ggalt)
+theme_set(theme_minimal()) # set theme globaly
+
+#we need to extract the model coefficient and join them together
+d1<-smod_vif %>%
+  data.frame(term=names(.),vif1=.)
+d2<-mod3_vif %>%
+  data.frame(term=names(.),vif2=.)
+
+
+#we want to create two columns, one for each model's vif, for all terms
+library(dplyr)
+data<-data.frame(term=c(d1$term,d2$term) %>% unique()) %>%
+  left_join(d1,by='term') %>%
+  full_join(d2,by='term')
+
+#fix NA in model missing terms. Note this obfuscates which terms are presnt in the model.
+data[is.na(data)]<-0
+
+gg <- ggplot(data, aes(x=vif1, xend=vif2, y=term, group=term)) + 
+        geom_dumbbell(color="#a3c4dc", 
+                      size=0.75)
+plot(gg)
+```
+
+### Bar chart
+
+Alternatively we can make a bar chart to compare model `vif`.
+
+```{r}
+#we need to extract the model coefficient and join them together
+d1<-smod_vif %>%
+  data.frame(term=names(.),vif=.)
+d2<-mod3_vif %>%
+  data.frame(term=names(.),vif=.)
+
+
+#we want to create two columns, one for each model's vif, for all terms
+data<-data.frame(term=c(d1$term,d2$term) %>% unique()) %>%
+  left_join(d1,by='term') %>%
+  left_join(d2,by='term')
+
+
+data<-melt(data,id.vars=c('term'))
+
+ggplot(data,aes(x=term, y=value,fill=variable,group=variable)) +
+  scale_y_log10() +
+  geom_bar(stat="identity",position=position_dodge()) +
+  scale_fill_discrete(name = "model", labels = c('smod','mod3')) # custom legend titles
+
+```
+
+### Simulation
+
+Next lets test how predictive our models are based on synthetic data. Lets use a simple strategy to simulate data for each categorical variable based on the original data column mean + standard deviations \* error.
+
+```{r,warning=FALSE}
+
+#Note you can use the short cut 'shift+ctrl+alt +R' (when in a function) to initialize Roxygen documentation 
+
+#' Title
+#'
+#' @param data data frame of numeric values. Note, need to add special handling for characters or factors.
+#' @param error error in units of standard deviation
+#'
+#' @return data frame of simulate data based on sampling from the normal distribution
+#' @export
+#'
+#' @examples
+simulate_data<-function(data,error=1,y=NULL){
+  
+  #loop over each column in and simulate n rows base original column mean and error
+  out<-lapply(data, function(x){
+    .mean<-mean(x,na.rm=TRUE)
+    .sd<-sd(x,na.rm=TRUE)
+    rnorm(nrow(data),.mean,.sd*error)
+    
+  }) %>%
+    do.call('cbind',.) 
+  
+  #note we might not want to add error to out objective
+  if(!is.null(y)){
+    out[,y]<-data[,y]
+  }
+  
+  #add row names
+  row.names(out)<-rownames(data)
+
+  
+  out
+}
+
+#test - note this does not handle categorical data correctly
+# simulate_data(mtcars)
+
+#a simple fix is to simulate data for each categorical variable separately
+library(tidyr)
+group<-c('am','vs','cyl','gear')
+data<-mtcars %>%
+  unite(., 'group',group,remove=FALSE)
+
+tmp<-data %>% split(.,data$group)
+sim_data<-lapply(tmp,function(x){
+  simulate_data(data = x %>% select(-group))
+  
+}) %>%
+  do.call('rbind',.) %>%
+  na.omit() %>%
+  data.frame()
+
+head(sim_data)
+
+#don't add error to y
+sim_data2<-lapply(tmp,function(x){
+  simulate_data(data = x %>% select(-group),y='mpg')
+  
+}) %>%
+  do.call('rbind',.) %>%
+  na.omit() %>%
+  data.frame()
+
+
+# #note see which groups we lost
+# dim(sim_data)
+# dim(mtcars)
+
+```
+
+### Prediction
+
+Predict `mpg` for the simulated data and compare model error.
+
+```{r}
+
+pred1<-predict(mod3,sim_data)
+pred2<-predict(smod,sim_data)
+
+#calculate error in original units of y - Root mean squared error (RMSE)
+library(Metrics)
+
+y<-'mpg'
+pred1_RMSE<-rmse(sim_data[,y,drop=TRUE],pred1 )
+pred2_RMSE<-rmse(sim_data[,y,drop=TRUE],pred2 )
+
+# error in y
+data.frame(model=c('mod3','smod'),RMSE=c(pred1_RMSE,pred2_RMSE))
+
+# no error in y
+pred1<-predict(mod3,sim_data2)
+pred2<-predict(smod,sim_data2)
+pred1_RMSE<-rmse(sim_data2[,y,drop=TRUE],pred1 )
+pred2_RMSE<-rmse(sim_data2[,y,drop=TRUE],pred2 )
+
+data.frame(model=c('mod3','smod'),RMSE=c(pred1_RMSE,pred2_RMSE))
+
+```
+
+### Model diagnostics
+
+A useful analysis is to visualize the model residuals vs the actual values.
+
+```{r}
+library(ggrepel) # improved text plotting
+residual<-{sim_data[,y,drop=TRUE]- pred1} %>% # absolute value
+  data.frame(actual=sim_data[,y,drop=TRUE],residual=.,row_name=row.names(sim_data))  
+
+resid_plot<-ggplot(residual, aes(x=actual,y=residual)) +
+  geom_point() +
+  stat_smooth(color='gray') +
+  geom_text_repel(aes(label=row_name))
+
+resid_plot
+
+```
+
+We can also plot the predicted vs the actual values for each group of the simulated data.
+
+```{r,warning=FALSE}
+predicted<-predict(mod3,sim_data)
+
+
+#add group info
+group<-c('am','vs','cyl','gear')
+data<-sim_data %>%
+  unite(., 'group',group,remove=FALSE) %>%
+  mutate(row_name=rownames(sim_data),predicted=predicted )
+
+
+pred_plot<-ggplot(data, aes(y = mpg, x =predicted)) +
+  geom_point(aes(color = group), size = 3) +
+  stat_smooth(method = 'lm', color = 'gray') +
+  geom_text_repel(aes(label = row_name, color = group), show.legend = FALSE) +
+  scale_color_discrete(name = paste(group, collapse = '_')) +
+  geom_abline(slope = 1,intercept = 0,linetype='dashed')  #line if predicted and actual perfectly matched
+  
+pred_plot
+```
+
+Finally we could compare the density distributions and test for significant differences in model predictions.
+
+```{r}
+
+#we want to plot the difference from the true vs. predicted value, residual
+resid1<-abs(sim_data[,y,drop=TRUE]-pred1) %>% # absolute value
+  data.frame(model='mod3',residual=.)  
+resid2<-abs(sim_data2[,y,drop=TRUE]-pred2) %>% # absolute value
+  data.frame(model='smod',residual=.)  
+
+data<-rbind(resid1,resid2)
+
+cols <- c("#F76D5E", "#72D8FF") # custom colors as hex codes
+
+# Density areas without lines
+dist_plot<-ggplot(data, aes(x = residual, fill = model)) +
+  geom_density(alpha = 0.8, color = NA) +  # color is the border
+  scale_fill_manual(values = cols) # set custom colors
+
+dist_plot
+```
+
+Test for difference in model errors.
+
+```{r}
+t.test(resid1$residual,resid2$residual) # note we may want to test the shifted log  (i.e. log(x+10)) of the residuals to make them normal or use a non-parametric test
+```
+
+Based on this analysis we can conclude the smaller model (i.e. less terms) is not significantly different from the model with more terms. In practice we want to proceed with interpreting the simplest model with the lowest error.
+
+## Combining multiple plots
+
+The [pathchwork](https://patchwork.data-imaginist.com/) `R` library makes it easy to combine multiple plots using a variety of custom layouts. Combining plots is as easy as creating individual plots and then defining how they should be combined to create a single visualization based on their layout and position (e.g. in rows and/or columns).
+
+```{r}
+library(patchwork)
+
+
+patchwork <- (dist_plot + resid_plot) / pred_plot
+patchwork + plot_annotation(
+  title = 'Model diagnostic plot',
+  subtitle = 'Comparison of model residual distributions, residuelas and predicted values',
+  caption = 'Example of what is possible'
+)
+
+```
+
+## Appendix
+
+-   [ggplot2 cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf)
+-   [ggplot2 tutorial](http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html)

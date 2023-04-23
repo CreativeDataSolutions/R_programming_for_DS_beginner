@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "R_studio.html",
+    "href": "R_studio.html",
+    "title": "1  Rstudio",
+    "section": "",
+    "text": "Rstudio is one the most comprehensive free interactive development environments (IDE) for R.\nThe following reference covers he major steps to install and configure your R studio.\nMajor steps include:\n\ninstall the latest version of R\ninstall Rstudio\nconfigure Rstudio defaults and appearance\n\nOnce you have Rstudio installed you can select Tools >> Global options and configure your preferences e.g. apperance."
+  },
+  {
+    "objectID": "openapi.html",
+    "href": "openapi.html",
+    "title": "7  AI coding help",
+    "section": "",
+    "text": "There is a lot of hype around tools like chatGPT which is a class of large language models (LLM's) for usingnatural language inputs to answer questions, including how to write code."
+  },
+  {
+    "objectID": "openapi.html#install-chatgpt-rstudio-add-in",
+    "href": "openapi.html#install-chatgpt-rstudio-add-in",
+    "title": "7  AI coding help",
+    "section": "7.1 Install chatGPT Rstudio add in",
+    "text": "7.1 Install chatGPT Rstudio add in\n\n7.1.1 Prerequisites\n\nMake an OpenAI account.\nCreate an OpenAI API key to use with the package.\nSet the API key up in Rstudio\n\n\n# install.packages(c(\"gptstudio\",\"waiter\"))\nlibrary(gptstudio)"
+  },
+  {
+    "objectID": "openapi.html#chatgpt-rstudio-add-in",
+    "href": "openapi.html#chatgpt-rstudio-add-in",
+    "title": "7  AI coding help",
+    "section": "7.2 chatGPT Rstudio add in",
+    "text": "7.2 chatGPT Rstudio add in\n\nTry to ask the openAI LLM how it would code up some of the examples you have seen so far. Try running the code, giving feedback about any errors to the chatbot and see if you can customize and/or improve the code you have seen so far."
+  },
+  {
+    "objectID": "openapi.html#appendix",
+    "href": "openapi.html#appendix",
+    "title": "7  AI coding help",
+    "section": "7.3 Appendix",
+    "text": "7.3 Appendix\n\ngptstudio\nOpenAI"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R programming for Data Science - A Beginner’s Guide",
+    "section": "",
+    "text": "This the following course covers the major topics for beginners to get started with R programming for data analysis and visualization.\n\n\n\nHow to get up and running with R using the Rstudio\nUnderstand R data types and functions\nUse data frame manipulation to wrangle data\nVisualize and plot with ggplot2 and plotly\nExploratory Data Analysis\nPut it all together by creating a reproducible data analysis reports\nUse AI tools to improve your code\n\n\n\n\n\nR >= 4.2.1\nRStudio >= 2022.12.0 Build 353"
+  }
+]

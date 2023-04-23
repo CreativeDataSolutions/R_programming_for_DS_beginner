@@ -1,0 +1,253 @@
+# Data types
+
+![DALL·E 2023-02-28 17.25.41 - a 4 headed hydra mythical creature, with heads of a dog, duck, parrot and chicken, cartoon style](imgs/data_types_header.png)
+
+`R` uses different `types` to describe individual units of data, `datum`, and stores these in different `types` of `data objects`. The following examples are meant to get you up and running with common `R` data types and `data.frames`. Take a look in the [appendix](#appendix) for more comprehensive examples.
+
+The major types of `datum` include.
+
+-   `logical` - `TRUE` or `FALSE`
+-   `numeric` - `1.0`
+-   `integer` - `1`
+-   `complex` - `1i`
+-   `character` - '1'
+-   `factor` - categorical made up of `keys = labels` and `values = levels` pairs
+-   `raw` - `01`
+
+Individual `datum` can be combined in the following common `data structures`:
+
+-   `vector` - `one`-dimensional storage for objects of the same `type`
+-   `matrix` - `two`-dimensional storage for objects of the same `type`
+-   `data.frame` - `two`-dimensional storage for objects of different `type`s
+-   `list` - `n`-dimensional storage for objects of different `type`s
+
+Note, many advanced data types exist which are optimized for specific use cases e.g. `arrays` and [tibbles](https://r4ds.had.co.nz/tibbles.html).
+
+## Hands on
+
+Lets create and manipulate some `datum`
+
+### Making `datum`
+
+Logical vectors can be used to subset data, execute logical comparisons (e.g. `and`, `or` and `not`) and are interpreted numerically as `TRUE = 1` and `FALSE = 0`. Lets create a `logical` `datum` and `assign` (i.e. save) it to the name `obj`.
+
+```{r}
+obj<-TRUE
+str(obj)
+```
+
+### Introspection
+
+Using the `str` function is a great way to inspect the properties of a `datum` and `data type`. Other useful introspection functions include:
+
+-   `length` - length
+-   `dim` - dimensions (e.g. number of rows and columns)
+-   `class` - object-oriented class
+-   `typeof` - type of the `datum`
+-   `summary` - numeric summary
+-   `names` - object names used for subsetting
+
+### Combining `datum`
+
+Lets add some more `datum` `elements` to our `obj`.
+
+```{r}
+obj<-c(obj,0)
+obj
+
+```
+
+This action took advantage of the `numeric` translation of `logicals` (see above) and used `c` to add another element. `R` also `coerced` (i.e. changed) the `data types` in the process to `numeric`.
+
+```{r}
+str(obj)
+```
+
+We can convert `types`. For example lets convert the `binary` (i.e two values) `obj` back to a logical `vector` (i.e. object with a `one`-dimension (i.e. `length`) and one `type`).
+
+```{r}
+as.logical(obj)
+```
+
+### `Data types`
+
+Using `c` we already created a `vector` `data type`. Next lets create a character vector and explore how logical vectors can be used to `subset` (i.e. select) specific `datum`.
+
+```{r}
+pet<-c('dog','parrot','chicken','duck')
+bird<-c(FALSE,TRUE,TRUE,TRUE)
+pet[bird]
+```
+
+Doing this we have used the `[]` function to extract `elements` from the the object `pets` based on the `logical` `vector` object `bird`. This returns all values equal to `TRUE` in `bird`. Logical vectors are commonly used for comparisons (e.g. [logical operations](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Logic.html)).
+
+For example, we get can easily get all `pets` which are `not` `birds`. This takes advantage of `conditional subsetting`.
+
+```{r}
+pet[!bird]
+```
+
+The example above first calculates all objects `not (!)` equal to `bird == TRUE` then extracts all `TRUE` values from the object `pets` (rows).
+
+We can use `logical operations` using multiple `logical` vectors. For example, lets define if an animals is `friendly` and select all `friendly` `bird`(s).
+
+```{r}
+friendly<-c(TRUE,TRUE,TRUE,FALSE)# define characteristics of each pet
+pet[friendly & bird]
+
+```
+
+### Combining `datum` in `data objects`
+
+The examples above created `vector`s for the various combinations of `datum`. A `vector` is `R`s default method to store `one`-dimensional (i.e. only have length) combinations of objects of the same `type`. Next lets store multiple vectors of different types using a `data.frame`.
+
+```{r}
+(df<-data.frame(pet=pet,bird=bird,friendly=friendly)) # note we can place the assignment '<-' in parentheses '()' to print the results
+```
+
+We can check the dimensions, and column and row names of `data.frames` as follows.
+
+```{r}
+dim(df)  
+colnames(df)
+rownames(df)
+#note we can get both and column and row names using 'dimnames'
+```
+
+When we created the data frame we `name`ed the elements, which allows us to subset them using the `$` notation. For example, we can do the following to get all `bird` elements which are `not` `friendly`.
+
+```{r}
+df[df$bird & !df$friendly,]
+```
+
+Notice, we can index a `two`-dimensional `data.frame` using the same `[]` operator and specify `rows` or `columns` using the notation `[rows,columns]`. The example above returned all rows which are `bird = TRUE` and `not` `friendly = TRUE` and return all `columns` for the results.
+
+If we wanted to only know the `pet` which is a `bird` and is not `friendly` we can do as follows.
+
+```{r}
+df[df$bird & !df$friendly,]$pet
+```
+
+A common data analysis task is to ask if specific `elements` are `%in%` (in) the `elements` of a `data object`. For example, we can get all `bird`s which are not equal to `pet ='duck'`.
+
+```{r}
+
+df[!df$pet %in% 'duck' & df$bird,]
+
+```
+
+Note, we could have done this is in a more `programmatic` manner by operating on objects created from the individual calculations. This makes it easier to read your code and simplifies recalculations give changes in `input`s.
+
+```{r}
+not_friendly_bird<-df[df$bird & !df$friendly,]$pet
+
+df[!df$pet %in% not_friendly_bird & df$bird,]
+
+```
+
+### Missing values
+
+Missing values are denoted in `R` as `NA`. Note, other special definitions include `Inf`,`-Inf`, `NaN` and `NULL`, interpreted as positive and negative `infinity`, `not a number` and `undefined`, respectively. Missing values need to be `omitted`, `imputed` or handled in `functions` else these can cause errors or will be propagated as `NA`.
+
+Next lets add missing values to or data and retry some of the examples above to see what happens. To create missing values we will use a logical operation to select a specific row, select a column for that row and then assign to `NA`.
+
+```{r}
+df[df$pet == 'dog',]$bird<-NA
+df
+```
+
+Lets see what happens when we try select all friendly birds.
+
+```{r}
+not_friendly_bird<-df[df$bird & !df$friendly,]$pet
+
+df[!df$pet %in% not_friendly_bird & df$bird,]
+```
+
+Notice the `NA` is propagated in the results which can later cause errors.
+
+We can omit the `NA` either before (recommended) or after the calculation.
+
+```{r}
+original_df<-df # save original data
+df<-na.omit(df) # remove all columns and/or rows with a missing value
+
+#notice we want to recalculate the original logical operators for the new data since it changed shape
+not_friendly_bird<-df[df$bird & !df$friendly,]$pet
+df[!df$pet %in% not_friendly_bird & df$bird,]
+```
+
+We can also check if a row or a column has an `NA` and treated in a custom manner. For example we can fix it.
+
+```{r}
+df<-original_df
+
+df[is.na(df$bird),]$bird<-FALSE
+df
+
+```
+
+## Lists
+
+After `data.frames`, `lists` are the most commonly used data types in `R`. A list can be used to store different `types` of `datum` and of unequal lengths. We will learn more about `lists` later. For now lets compare lists to `data.frames`.
+
+Lets create a list and convert a convert a `data.frame` to a list.
+
+```{r}
+(df_list<- list(pet=pet,bird = bird,friendly = friendly)) # name = value
+(df_list2<-as.list(df)) # we can also convert a data.frame to a list
+
+identical(df_list,df_list2)
+```
+
+Similar to `data.frames` we can extract list elements based on their name.
+
+```{r}
+df_list$pet
+```
+
+We can also get items based on their numeric index (order in list).
+
+```{r}
+df_list[1] # this returns the list element name and values
+df_list[[1]] # this returns only the values
+```
+
+We can unpack all the elements in the list and return a `vector`.
+
+```{r}
+unlist(df_list)  #notice mixed types are converted to strings (i.e. quoted text)
+```
+
+## Matrices and Arrays
+
+Matrices (two dimensional table) and arrays (n dimensional table) are often used for specialized mathematical calculations. Matrices can be useful for organizing vectors into different dimensions.
+
+Lets represent a vector as table with custom number of rows and columns.
+
+```{r}
+tmp<-unlist(df_list)
+(mat<-matrix(tmp,ncol=3)) # note this fills by columns
+# matrix(tmp,ncol=3,byrow = TRUE)  #fill by row
+```
+
+Matrices are useful for many other purposes. Unlike `data.frame`s they do not store mixed types (i.e. when numeric and other types are mixed all values are `coerced` to `strings`).
+
+We can convert a matrix to a `data.frame`.
+
+```{r}
+(df2<-as.data.frame(mat))
+dimnames(df2)<-dimnames(df)# set dimension names
+str(df2) # notice our original types may have not been preserved
+```
+
+Lastly, we can compare `R` `objects`.
+
+```{r}
+identical(df,df2) # more advanced methods can show what is different
+```
+
+## Appendix {#appendix}
+
+-   [Data Carpentry introduction to R](https://datacarpentry.org/R-ecology-lesson/01-intro-to-r.html)
+-   [Data types overview](https://www.statmethods.net/input/datatypes.html)

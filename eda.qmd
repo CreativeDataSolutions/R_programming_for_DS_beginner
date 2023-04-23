@@ -1,0 +1,348 @@
+# Exploratory Data Analysis
+
+![DALL·E 2023-04-16 20.38.25 - robot octopus, embodied by an AI, holding data science and machine learning tools, colorful underwater, cyberpunk](imgs/AI.png)
+
+Exploratory data analysis (EDA) is helpful for summarizing variables, accessing data quality, exploring multivariate trends and refining data analysis strategies.
+
+## Data Summary
+
+When faced with a new data set, a great first step is to identify the types of variables and summarize them. Lets use this as an opportunity to practice the skills we have learned so far. Later we will use some `R libraries` to take our data summary skills to a new level.
+
+### Overview and summary
+
+```{r}
+library(dplyr)
+
+data<-mtcars
+data(data)
+
+#data structure
+str(data)
+
+#variable types
+lapply(data,class)  %>%
+  unlist() %>%
+  setNames(.,names(data))
+
+#basic summary
+summary(data)
+```
+
+Next lets use the `skimr` library for a quick data overview.
+
+### `skimr`
+
+```{r}
+library(skimr)
+
+skim(data) 
+
+```
+
+Do you recognize the output format? This is the same as we previously created in the data wrangling section. Additional information includes overview of `missing` values, `quantiles` and variable histograms. This method is specific for different types.
+
+```{r}
+library(dplyr)
+mtcars %>%
+  mutate(cyl=as.factor(cyl)) %>%
+  skim()
+
+```
+
+Notice how we get a separate summary for each variable type.
+
+## `summarytools` summary
+
+```{r}
+library(summarytools)
+
+.summary <- dfSummary(data)
+# view(.summary)  #view html report
+```
+
+![](imgs/summarytools.png)
+
+## Data Quality
+
+Data quality assessment is an important first step for any analysis. Ideally the experimental design includes replicated quality control samples which can be used for this purpose. For this demo we will assess variability for a grouping variable.
+
+```{r}
+
+.summary<-mtcars %>%
+  mutate(cyl=as.factor(cyl)) %>%
+  group_by(cyl) %>%
+  skim()
+
+.summary
+
+```
+
+We used `group_by` to summarize trends for each level of our grouping variable `cyl`. Notice how the data is formatted. This is referred to as a `melted` or `long` data format. Next, lets calculate the coefficient of variation (`CV; std/mean`) for each column in our data and `level` of `cyl`.
+
+```{r}
+#calculate CV
+CV <-.summary %>%
+ select(contains(c('mean','sd'))) %>%
+  {(.[2]/.[1]) *100} %>%
+  setNames(.,'CV')
+
+.summary['CV']<- CV
+```
+
+Plot the `CV` vs. the `mean` for each variable separately for each level of `cyl`.
+
+```{r}
+library(ggplot2)
+library(ggrepel)
+
+theme_set(theme_minimal()) # set theme globaly
+options(repr.plot.width = 2, repr.plot.height =3) # globaly set wi
+
+ggplot(.summary, aes(x=numeric.mean,y=CV,color=cyl)) + 
+  geom_point(size=2, alpha=.75) +
+  geom_text_repel(aes(label=skim_variable),show.legend = FALSE) +
+  facet_grid(.~cyl) +
+  scale_color_brewer(palette = 'Set1') +
+  xlab('mean') +
+  ylab('Coefficient of variation')
+
+```
+
+This plot is useful to identify variables with low precision which may need to be omitted for further analyses. In the case of `mtcars` we see the variables with high `CV` compared to their mean should all be categorical. For example we can check that `am` shows a large differences for `levels` of `cyl`.
+
+```{r}
+mtcars %>%
+  select(one_of(c('cyl','am'))) %>%
+  table()
+
+```
+
+## Multivariate Analysis
+
+Next lets visualize sample (row) trends given all variables (columns) using `principal components analysis` (`PCA`). First, lets calculate the principal components and visualize their variance explained.
+
+```{r}
+#calculate and show eigenvalue summary
+pca_obj <- prcomp(data,scale= TRUE)
+```
+
+### Visualize optimal principal components (PCs) to retain.
+
+```{r}
+#notice the summary method does not return the results as printed.
+#we could modify the method todo so or replicate results
+eigenvals<-pca_obj$sdev
+eigenvals_cumsum<-cumsum(eigenvals)
+var_explained<-sum(eigenvals)
+prop_var_exp<-eigenvals/var_explained
+prop_cumsum<-eigenvals_cumsum/var_explained
+
+pca_eigen<-data.frame(PC=1:length(eigenvals),var_explained=prop_var_exp,eigen_cumsum=prop_cumsum)
+
+```
+
+Plot eigenvalues to select total number of PCs
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+df<-melt(pca_eigen,id.vars = 'PC')
+
+ggplot(df, aes(
+  x = as.factor(PC),
+  y = value,
+  fill = variable,
+  group = variable
+)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_fill_brewer(
+    palette = 'Set1',
+    labels = c('variance explained', 'cummulative variance\nexplained')
+  ) +
+  theme_minimal() +
+  geom_hline(yintercept = .8, linetype = "dashed") +
+  xlab('Principal Components') 
+
+```
+
+## Create a scatter plot matrix to visualize `PC` scores
+
+Visualize each pairwise `PC` comparison and color sample scores by `cyl`.
+
+```{r}
+library(GGally)
+library(plotly)
+
+limit<-5
+group<-'cyl'
+
+df <- pca_obj$x[,1:limit] %>%
+  as.data.frame() %>%
+  mutate(id = rownames(.)) %>%
+  left_join(mtcars %>% select(one_of(group)) %>% mutate(id = rownames(.))) %>%
+  select(-id) %>%
+  mutate(group=as.factor(!!sym(group)))
+
+  
+p <- ggpairs(df, ggplot2::aes(colour=group ))
+
+ggplotly(p)
+
+```
+
+### Visualize specific `PC` sample scores
+
+Plot the `principal plane` (`PC1` vs `PC2`) and identify scores for different numbers of `cyl` with ellipses.
+
+```{r}
+library(ggrepel)
+scores_df <- pca_obj$x %>%
+  as.data.frame() %>%
+  mutate(id = rownames(.)) %>%
+  left_join(mtcars %>% mutate(id = rownames(.), cyl = as.factor(cyl)))
+
+ggplot(scores_df, aes(x = PC1, y = PC2, color = cyl)) +
+  geom_point(size=3) +
+  geom_text_repel(aes(label=id), show.legend = FALSE, max.overlaps = nrow(df),force=100) +
+  stat_ellipse(aes(fill=cyl), geom = "polygon",alpha=.25, show.legend = FALSE) +
+  ggtitle('Scores')
+
+```
+
+This visualization is helpful for identify similarity within and between different numbers of `cyl`. For example, we can see that the biggest differences (in variables) are between `cyl=4` and `cyl=8`. If we expect sample scores to be `bivariate normal` in the scores space, samples outside the ellipses can be helpful for identify moderate outliers among groups of `cyl`.
+
+### Visualize variable loadings
+
+```{r}
+df <- pca_obj$rotation %>%
+  as.data.frame() %>%
+  mutate(id = rownames(.)) 
+
+ggplot(df, aes(x = PC1, y = PC2)) +
+  geom_point() +
+  geom_text_repel(aes(label=id), show.legend = FALSE) +
+  ggtitle('Loadings')
+  
+  
+```
+
+### Create a custom component for axis labels
+
+We will show the percent explained for each PC.
+
+```{r}
+
+prcomp_axis_label <- function(obj,digits=1) {
+  
+  n<-obj %>% length()
+  .name<-
+    paste0(
+    rep('PC',n),
+    c(1:n)
+  )
+  
+  paste0(.name,'[',round(obj,digits),'%]') %>%
+    setNames(.name)
+
+}
+
+prcomp_axis_label(pca_eigen$var_explained*100,0)
+
+
+
+```
+
+```{r}
+my_labels<-prcomp_axis_label(pca_eigen$var_explained*100,0)
+x <-'PC1'
+y<-'PC2'
+
+df<-df %>%
+  select(one_of(c(x,y,'id')))
+
+ggplot(df, aes_string(x = x, y = y)) +
+  geom_point() +
+  geom_text_repel(aes(label=id), show.legend = FALSE, max.overlaps = nrow(df),force=3) +
+  ggtitle('Variable loadings') +
+  ylab(my_labels[y]) +
+  xlab(my_labels[x])
+
+```
+Loadings can be used to identify which variables are most different between groups of sample scores. For example, since groups of `cyl` scores are spread in the x-axis (`PC1)` we can look at the variables with largest `loadings` on `PC1` (largest negative and positive `PC1` values (position on the x-axis) to identify the largest differences in variables between groups of `cyl`. This can be useful to identify that cars with smaller number of `cyl` have higher `mpg` and lower `disp`.
+
+We can investigate this observation by making a custom visualization.
+
+
+```{r}
+p<-ggplot(mtcars, aes(x = disp, y = mpg,color=as.factor(cyl))) +
+  geom_point(size=3)
+
+p
+```
+
+Notice how we can almost perfectly separate groups of `cyl` based on these two dimensions? 
+
+```{r}
+library(tidyr)
+#calculate min and max for variables given groups of cyl
+.ranges<-mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(min_mpg = min(mpg), max_mpg = max(mpg),
+            min_disp = min(disp), max_disp = max(disp)) %>%
+  gather(variable, value, -cyl) %>% 
+  separate(variable, into = c("variable", "stat"), sep = "_") %>% 
+  spread(stat, value)
+
+
+#add rectangles to the plot
+#note: this is sub optimal as we need to know what is x or y axis in the plot
+tmp<- .ranges %>%
+  split(., .$cyl)
+
+#need to know colors to set rectangle colors
+p<-p + 
+  scale_colour_brewer(
+  palette = 'Set1',
+  aesthetics = "colour"
+)
+#get color codes
+library(RColorBrewer)
+.colors<-brewer.pal(length(levels(mtcars$cyl)), 'Set1')
+
+for(x in 1:length(tmp)){
+  
+  i<-tmp[[x]]
+  xmin<- i %>%
+    filter(variable == 'min') %>%
+    select(disp) %>% 
+    .[1,,drop=TRUE]
+  xmax<- i %>%
+    filter(variable == 'max') %>%
+    select(disp) %>% 
+    .[1,,drop=TRUE]
+  ymin<- i %>%
+    filter(variable == 'min') %>%
+    select(mpg) %>% 
+    .[1,,drop=TRUE]
+  ymax<- i %>%
+    filter(variable == 'max') %>%
+    select(mpg) %>% 
+    .[1,,drop=TRUE]
+    
+p<-p +
+  annotate("rect", xmin = xmin , xmax = xmax, ymin = ymin, ymax = ymax,
+           alpha = .5,fill = .colors[x])
+  
+}
+
+
+p + guides(color=guide_legend(title="number of cylinders"))
+```
+
+
+
+## Appendix
+
+-   [summarytools](https://htmlpreview.github.io/?https://github.com/dcomtois/summarytools/blob/master/doc/introduction.html)
+-   [skimr](https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html)

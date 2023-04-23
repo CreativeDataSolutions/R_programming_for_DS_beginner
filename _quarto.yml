@@ -1,0 +1,29 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "R programming for Data Science  - A Beginner's Guide"
+  author: "Dmitry Grapov"
+  date: "04/22/2023"
+  chapters:
+    - index.qmd
+    - R_studio.qmd
+    - data_types.qmd
+    - data_wrangling.qmd
+    - ggplot2_intro.qmd
+    - eda.qmd
+    - reproducible_reports.qmd
+    - openapi.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: darkly
+    css: style.css
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

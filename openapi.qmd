@@ -1,0 +1,34 @@
+# AI coding help
+
+```{r,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
+```
+
+There is a lot of hype around tools like `chatGPT` which is a class of `large language models` (`LLM's`) for using`natural language` inputs to answer questions, including how to write code.
+
+![](imgs/openai.png)
+
+## Install chatGPT `Rstudio add in`
+
+### Prerequisites
+
+-   Make an [OpenAI](http://chat.openai.com/) account.
+-   Create an [OpenAI API key](https://platform.openai.com/account/api-keys) to use with the package.
+-   Set the API key up in Rstudio
+
+```{r}
+# install.packages(c("gptstudio","waiter"))
+library(gptstudio)
+
+```
+
+## `chatGPT` Rstudio add in
+
+![](imgs/openai_addin.png)
+
+Try to ask the `openAI` `LLM` how it would code up some of the examples you have seen so far. Try running the code, giving feedback about any errors to the `chatbot` and see if you can customize and/or improve the code you have seen so far.
+
+## Appendix
+
+-   [gptstudio](https://michelnivard.github.io/gptstudio/)
+-   [OpenAI](http://chat.openai.com/)

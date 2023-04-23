@@ -1,0 +1,417 @@
+# Data Wrangling
+
+![DALL·E 2023-04-12 21.00.44 - data wrangling, rodeo cowboy panda, code, data frame, solarpunk, colorful](imgs/data_wrangling.png)
+
+```{r,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
+```
+
+```{r,echo=FALSE}
+#load data
+library(dplyr)
+library(tidyr)
+#Note we included some new arguments in our R block. echo controls if the R code executed is printed and message if the messages from R are shown.
+```
+
+## Data
+
+The best way to learn how to manipulate data in `R` is to find a simple data set and practice different transformations. The `datastes` `R` package has many examples to experiment with.
+
+While we will work with demo data for the rest of the examples, in practice you will likely want to [import](https://r4ds.had.co.nz/data-import.html) your own custom data sets.
+
+Take a look at some available data sets in the `datastes` `R` package.
+
+```{r}
+if(!require(datasets)) install.packages('datasets') #install package for the first time
+library(datasets) # load package in session
+
+.data<-data()
+# str(.data) #take a look at the resulting object 
+head(.data$results[,c('Item','Title')]) #extract specific elements
+```
+
+Lets find some data about cars.
+
+```{r}
+#lets look for a key word (i.e. substring) in Title of the datasets
+keyword<-'car'
+#try ?grepl to see how else it can be used
+cars_id<-grepl(keyword,as.data.frame(.data$result)$Title,ignore.case = T)
+.data$results[cars_id,]
+```
+
+See [here](https://r4ds.had.co.nz/strings.html) for more examples of `string` processing in `R`.
+
+Lets load and review the `mtcars` data set.
+
+```{r}
+data("mtcars")
+# View(mtcars) #table view for small data - uncomment this line to see an interactive table
+#note we can also look at this data in the environment tab of Rstudio
+```
+
+Summarize the data.
+
+```{r}
+summary(mtcars) # see more advanced data summaries in the `Exploratory Data Analysis` section
+```
+
+Next lets introduce a more readable way to link `R` functions. We will use the pipe operator `%>%`.
+
+```{r}
+#lets format the meant miles per gallon to two digits
+round(mean(mtcars$mpg),2)
+
+# we can rewrite this as a pipe where x %>% f(.) is equivalent to f(x). The '.' can be implicit or used to denote the 'x' on the left side of the equation.
+mtcars$mpg %>% 
+  mean(.) %>%
+  round(.,2)
+
+```
+
+Note `%>%` can be imported in different ways and depends on the `magrittr` library. A more recent `R` update now allows to call the pipe operator from the `base` library as `|>`.
+
+We can use the `R package` `dplyr` to create a custom summary. Lets calculate the mean and standard deviation of each column.
+
+```{r}
+my_summary<-mtcars %>%
+  summarise_each(., funs(mean,stdev=sd))
+
+my_summary
+```
+
+A better format could be to output the results as columns for each row which correspond to the original columns in the data. We can check the [`dplyr`cheat-sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) to see what other data wrangling operations this package enables.
+
+```{r}
+means <- my_summary %>%
+  select(ends_with('_mean')) %>%
+  t()
+  
+stdevs <- my_summary %>%
+  select(!ends_with('_mean')) %>%
+ t()
+
+(my_summary2 <-
+    data.frame(
+      variable = colnames(mtcars),
+      mean = means,
+      stdev = stdevs
+    ))
+
+```
+
+In addition to `dplyr` the `tidyr` package also offers many useful data manipulation [functions](https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf).
+
+`dplyr`
+
+![](imgs/dplyr_cheatsheet.png)
+
+`tidyr`
+
+![](imgs/tidyr_cheatsheet.png)
+
+Lets round the results and then create a summary as `mean +/- stdev` . To do this we will create our first `function`. A `function` simply executes (calls) on a set of inputs (arguments).
+
+```{r}
+# lets start with the logic and then convert it to a function
+
+#inputs
+digits<-1
+x<-my_summary2[,2,drop=FALSE] # data to test with-- second column
+
+#step 1 - round
+x %>%
+ round(.,digits)
+
+#step 2 - combine two columns
+my_summary2 %>%
+  select(one_of(c('mean','stdev'))) %>%
+  unite(.,'mean_sd',sep= " +/- ")
+
+#create a function to do both at the same time on arbitrary inputs
+#note we are using Roxygen syntax (ctrl+shift+alt+R) to also document our funtion which is relevant when making R packages
+
+#' summary_function
+#'
+#' @param x data.frame
+#' @param digits int, number of digits to round to
+#' @param name str, colum name of results
+#' @param sep str, what to separate the combined columns with
+#'
+#' @return data.frame where each column is rounded to `digits` and combined into a string collapsed on `sep`.
+#' @export
+#' @details Round each column to `digits` and combined all columns into a string collapsed on `sep`.
+#' @examples
+summary_function <-
+  function(x,
+           digits,
+           name = 'mean_sd',
+           sep = ' +/- ') {
+    x %>%
+      summarise(across(), round(.,digits)) %>%
+      unite(.,col= !!name, sep = sep) # ... use !! or {{}} for string arguments passed to dplyr verbs read more: https://dplyr.tidyverse.org/articles/programming.html
+  }
+
+#call function
+(tmp <-
+    my_summary2 %>%
+    select(one_of(c('mean', 'stdev'))) %>%
+    summary_function(., digits=2)
+  )
+
+#add created object to our data
+(my_summary2<- my_summary2  %>%
+  cbind(.,tmp)
+  )
+
+```
+
+Note, it can also be useful to call a functions by their `string` names using `do.call('function_name',list(<arguments>))`.
+
+## Loops
+
+When we executed a function over each column this is executed by looping the calculation `n` number of times where `n` is equal to the number of columns. While modern libraries like `dplyr`, `tidyr` and `purrr` do this internally, it is useful to understand how to create your own loops. The simplest way to `loop` is using the `for` function. Note `R` is a vectorized language and looping is often discouraged because its much slower; this approach is still very useful for prototyping complex and simpler to read, understand and debug code.
+
+Lets use `apply` to mimic `summarise`.
+
+```{r}
+
+means<-apply(mtcars,2,mean) # the margin 1 == across rows or 2 == columns
+stdevs<-apply(mtcars,2,'sd') # functions or their names are supported
+
+data.frame(variable=colnames(mtcars),mean=means,stdev=stdevs)
+
+```
+
+Next, lets repeat our column summary calculation using a `for` `loop`.
+
+```{r}
+results<-list() #initialize an empty list to store results in. Note it is more efficient to make a list of the same length as the number of elements you want to store.
+for (i in 1:ncol(mtcars)){
+  
+  results$mean[i]<-mtcars[,i] %>%
+    mean() # store results in position [i] in the list results element named 'mean'
+  results$sd[i]<-mtcars[,i] %>%
+    sd()
+}
+
+data.frame(variable=colnames(mtcars),results)
+
+
+```
+
+A `lapply` is more convenient and versatile version of a `for` `loop`.
+
+```{r}
+lapply(mtcars,function(x){
+  c(mean=mean(x),sd=sd(x))
+}) %>%
+  do.call('rbind',.) %>% #combine list elements rowwise; use 'cbind' to combine columnwise 
+  data.frame(variable=colnames(mtcars),.) 
+```
+
+Next, we will build on our function to create summaries for groups of rows. Lets summarize miles per gallon `mpg` for cars with different number of cylinders `cyl`. First lets create the functions for the individual steps.
+
+```{r}
+
+
+
+#we need to regenerate our our original analysis
+#we can take this opportunity to functionalize all the steps
+#1) calculate mean and standard deviation of each column
+#2) pivot data
+#3) create a custom summary
+
+#1 - execute function(s) on each column
+column_summary<-function(data,functions = c(mean=mean,stdev=sd)){
+  data %>%
+  summarise_each(., funs(!!!(functions))) # use !!! for functions or unquoted arguments
+  
+}
+
+#test #1 
+(x<-mtcars %>% 
+  column_summary()
+)
+
+
+
+#2 format results
+#we can explicitly pass column names we want to separate or infer based on suffix
+#2 A. infer common suffix
+get_unique_suffix<-function(data,sep='_'){
+  tmp<-colnames(data) %>%  #get column names
+  strsplit(.,'_') %>% #split string on '_''
+  do.call('rbind',.) %>% # combine list elements row wise
+  .[,2] %>% #get second column, better to reference by name
+  unique() #get unique values
+}
+
+#test 2 A
+get_unique_suffix(x)
+
+#2 B transpose elements
+transpose_on_suffix<-function(data,sep='_'){
+  
+  suffixes<- data %>%
+    get_unique_suffix(.,sep)
+  
+  #loop over suffixes and transpose
+  lapply(suffixes,function(x){
+    data %>%
+    select(ends_with(x)) %>%
+    t() # transpose operation, i.e. rotate rows to columns
+    
+  }) %>%
+  do.call('cbind',.) %>% # bind list elements columnwise
+    data.frame() %>% # make sure its a data.frame
+    setNames(.,suffixes) #set column names
+}
+
+#test 2 A
+transpose_on_suffix(x)
+
+```
+
+Next we will execute our workflow grouping by different number of cylinders `cyl`.
+
+```{r}
+#next lets use our first factor to group our data
+class(mtcars$cyl) #we want to convert this class to a factor
+#factors are a categorical vectors which are used for grouping operations
+str(as.factor(mtcars$cyl))
+
+
+#we could A) create a custom loop or B) modify our origin to handle a grouping variable
+
+#A) 
+#we will split the data into list elements for each group and execute our simple workflow 
+data<-mtcars # make this more generic
+tmp<-data %>%
+  mutate(groups=as.factor(cyl)) #note, we need to save to an intermediate object for split to play nice with dplyr
+
+tmp %>% 
+  split(.,.$groups) %>%
+  lapply(.,function(x){
+    x %>% select(-groups) %>% #remove factor which will cause an issue -- native dplyr handles this for us
+      column_summary(.) %>%
+      transpose_on_suffix(.) %>%
+      mutate(groups=x$groups %>% unique(),variable=colnames(data)) #note, we lost the variable names during the calculation Some options to fix this are A) save and carry forward variables in the original calculation (best -- complicated) or B) set variables as our data column names (simple but hard for others to understand and verify as correct)
+  }) %>%
+  do.call('rbind',.)
+
+  
+#B) 
+#to execute the dplyr we need to modify transpose_on_suffix
+# we need to account for column_summary to yield results for each level of our grouping variable. 
+# This exercise is not for the feint of heart. For now lets go with plan A or the path of least resistance. Bonus: try to use an AI code helper to see how it would solve this task using dplyr and tidyr
+
+# data %>%
+#   mutate(groups=as.factor(cyl)) %>%
+#   group_by(groups) %>%
+#   column_summary() %>%
+#   transpose_on_suffix(.) # our original function needs to keep track of grouping variable levels. An easy solution is not obvious.
+```
+
+## Error handling
+
+Sometimes we may observe unexpected errors when executing functions over parts of the data (e.g. sample size is too low). We could handle this by checking and removing possible errors before hand or (simpler) handling errors in the calculation.
+
+Lets take a moment to learn error handling.
+
+```{r}
+
+#the general form for for error handling using base R 
+# tryCatch({
+#     expression # function call
+# }, warning = function(w){
+#     code that handles the warnings
+# }, error = function(e){
+#     code that handles the errors
+# }, finally = function(f){
+#     clean-up code
+# })
+
+f<-function(a){
+  a + 1
+}
+
+data<-c(1:10)
+f(data)
+
+# data<-c('1','a') # uncomment this to see an error message
+# f(data)
+
+tryCatch(f(data),error=function(e){print(as.character(e))}) # in this toy example the error is ignored and instead we print the error message as a string
+
+
+```
+
+Note, an alternative is to use the `purrr:safely` [function](https://r4ds.had.co.nz/iteration.html?q=safely#dealing-with-failure) which returns a more standard `list` consisting of `results` and `error`.
+
+## Debugging
+
+Debugging is the act of investigating how code functions or what causes errors. The `browser` and `debug` functions can be used to interactively run code and view its state.
+
+```{r}
+
+#browser can be used as a break point to pause code execution and overview its state
+f<-function(x){
+  x <- x + rnorm(1)
+  browser() # use c = continue, n = next line and Q = quit debugger
+  x
+  
+}
+
+f(2)
+
+#debug will sets a breakpoint any time a given function is run
+
+f<-function(x){
+  x <- x + rnorm(1)
+
+  x
+  
+}
+
+debug(f)
+
+f(2)
+```
+
+## Reproducing randomness
+
+Many `R` functions have random or stochastic components. The `set.seed` function can be used to reproduce function results with stochastic components.
+
+```{r}
+
+f<-function(){
+ c(rnorm(1),rnorm(1)) 
+}
+
+f()
+f()
+
+f<-function(seed=1){
+ set.seed(seed)
+ c(rnorm(1),rnorm(1)) 
+}
+
+f()
+f()
+f(2) # different random seed
+f(2) 
+
+#can also be used to set the global seed
+set.seed(1)
+c(rnorm(1),rnorm(1)) 
+set.seed(2)
+c(rnorm(1),rnorm(1)) 
+
+```
+
+Data wrangling is an inherent task for every data science workflow. We will build upon the data wrangling skills you have learned so far in the next sections.
+
+## Appendix
+
+-   [R for Data Science](https://r4ds.had.co.nz/index.html)
