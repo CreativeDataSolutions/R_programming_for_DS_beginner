@@ -39,6 +39,6 @@
     "href": "index.html",
     "title": "R programming for Data Science - A Beginner’s Guide",
     "section": "",
-    "text": "This the following course covers the major topics for beginners to get started with R programming for data analysis and visualization.\n\n\n\nHow to get up and running with R using the Rstudio\nUnderstand R data types and functions\nUse data frame manipulation to wrangle data\nVisualize and plot with ggplot2 and plotly\nExploratory Data Analysis\nPut it all together by creating a reproducible data analysis reports\nUse AI tools to improve your code\n\n\n\n\n\nR >= 4.2.1\nRStudio >= 2022.12.0 Build 353"
+    "text": "This the following course covers the major topics for beginners to get started with R programming for data analysis and visualization.\n\n\n\nHow to get up and running with R using the Rstudio\nUnderstand R data types and functions\nUse data frame manipulation to wrangle data\nVisualize and plot with ggplot2 and plotly\nExploratory Data Analysis\nPut it all together by creating a reproducible data analysis reports\nUse AI tools to improve your code\n\n\n\n\n\nR >= 4.2.1\nRStudio >= 2022.12.0 Build 353\n\nSee section on Rsudio to get more details."
   }
 ]

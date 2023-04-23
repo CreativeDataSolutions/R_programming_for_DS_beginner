@@ -17,4 +17,6 @@ This the following course covers the major topics for beginners to get started w
 * `R` >= `4.2.1`
 * `RStudio` >= `2022.12.0 Build 353`
 
+See section on [Rsudio](https://creativedatasolutions.github.io/R_programming_for_DS_beginner/R_studio.html) to get more details.
+
 
