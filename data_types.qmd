@@ -1,5 +1,9 @@
 # Data types
 
+```{r,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
+```
+
 ![DALL·E 2023-02-28 17.25.41 - a 4 headed hydra mythical creature, with heads of a dog, duck, parrot and chicken, cartoon style](imgs/data_types_header.png)
 
 `R` uses different `types` to describe individual units of data, `datum`, and stores these in different `types` of `data objects`. The following examples are meant to get you up and running with common `R` data types and `data.frames`. Take a look in the [appendix](#appendix) for more comprehensive examples.

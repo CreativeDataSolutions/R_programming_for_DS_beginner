@@ -1,4 +1,9 @@
 # Rstudio
+
+```{r,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
+```
+
 ![DALL·E 2023-04-12 20.55.50 - hacker unicorn writing R code using the Rstudio IDE, cyberpunk](imgs/rstudio.png)
 
 [Rstudio](https://posit.co/products/open-source/rstudio/) is one the most comprehensive free interactive development environments (IDE) for `R`. 

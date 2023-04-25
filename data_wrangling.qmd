@@ -1,5 +1,9 @@
 # Data Wrangling
 
+```{r,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
+```
+
 ![DALL·E 2023-04-12 21.00.44 - data wrangling, rodeo cowboy panda, code, data frame, solarpunk, colorful](imgs/data_wrangling.png)
 
 ```{r,echo=FALSE}

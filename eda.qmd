@@ -1,5 +1,9 @@
 # Exploratory Data Analysis
 
+```{r,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
+```
+
 ![DALL·E 2023-04-16 20.38.25 - robot octopus, embodied by an AI, holding data science and machine learning tools, colorful underwater, cyberpunk](imgs/AI.png)
 
 Exploratory data analysis (EDA) is helpful for summarizing variables, accessing data quality, exploring multivariate trends and refining data analysis strategies.
