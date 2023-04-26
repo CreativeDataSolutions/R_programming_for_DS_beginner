@@ -12,7 +12,7 @@ While `R` is often described as a \~niche programming language (e.g. for statist
 
 The [`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html) library supports rich combinations of graphical layers `geoms`, statistically derived layers, annotations, scales and aesthetic controls (just to name a few of its [features](https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf)).
 
-Next lets spend some time learning how to prepare and plot our data using `ggplot2`.
+Next lets spend some time learning how to prepare and plot our data using `ggplot2`. Check out more detailed [examples](https://r4ds.had.co.nz/data-visualisation.html).
 
 ```{r,message=FALSE}
 library(ggplot2)
