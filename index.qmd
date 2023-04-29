@@ -1,7 +1,7 @@
 # Preface {.unnumbered}
 ![](imgs/course_logo.png)
 
-This the following course covers the major topics for beginners to get started with `R` programming for data analysis and visualization. 
+This course covers the major topics for beginners to get started with `R` programming for data analysis and visualization. 
 
 ## Major topics include:
 
