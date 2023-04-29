@@ -2,7 +2,8 @@
 ![](imgs/course_logo.png)
 
 This course covers the major topics for beginners to get started with `R` programming for data analysis and visualization. 
-Topics:
+
+**Topics**:
 
 *	How to get up and running with `R` using the [Rstudio](https://posit.co/products/open-source/rstudio/)
 *	Understand `R` data types and functions 
