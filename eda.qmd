@@ -87,7 +87,7 @@ We used `group_by` to summarize trends for each level of our grouping variable `
 #calculate CV
 CV <-.summary %>%
  select(contains(c('mean','sd'))) %>%
-  {(.[2]/.[1]) *100} %>%
+  {(.[2]/.[1]) * 100} %>%
   setNames(.,'CV')
 
 .summary['CV']<- CV
@@ -260,12 +260,12 @@ prcomp_axis_label(pca_eigen$var_explained*100,0)
 ```{r}
 my_labels<-prcomp_axis_label(pca_eigen$var_explained*100,0)
 x <-'PC1'
-y<-'PC2'
+y<-'PC4'
 
-df<-df %>%
+.df<-df %>%
   select(one_of(c(x,y,'id')))
 
-ggplot(df, aes_string(x = x, y = y)) +
+ggplot(.df, aes_string(x = x, y = y)) +
   geom_point() +
   geom_text_repel(aes(label=id), show.legend = FALSE, max.overlaps = nrow(df),force=3) +
   ggtitle('Variable loadings') +
@@ -273,10 +273,10 @@ ggplot(df, aes_string(x = x, y = y)) +
   xlab(my_labels[x])
 
 ```
+
 Loadings can be used to identify which variables are most different between groups of sample scores. For example, since groups of `cyl` scores are spread in the x-axis (`PC1)` we can look at the variables with largest `loadings` on `PC1` (largest negative and positive `PC1` values (position on the x-axis) to identify the largest differences in variables between groups of `cyl`. This can be useful to identify that cars with smaller number of `cyl` have higher `mpg` and lower `disp`.
 
 We can investigate this observation by making a custom visualization.
-
 
 ```{r}
 p<-ggplot(mtcars, aes(x = disp, y = mpg,color=as.factor(cyl))) +
@@ -285,7 +285,7 @@ p<-ggplot(mtcars, aes(x = disp, y = mpg,color=as.factor(cyl))) +
 p
 ```
 
-Notice how we can almost perfectly separate groups of `cyl` based on these two dimensions? 
+Notice how we can almost perfectly separate groups of `cyl` based on these two dimensions?
 
 ```{r}
 library(tidyr)
@@ -343,8 +343,6 @@ p<-p +
 
 p + guides(color=guide_legend(title="number of cylinders"))
 ```
-
-
 
 ## Appendix
 

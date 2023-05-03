@@ -28,7 +28,7 @@ Lets visualize the relationship between data features and miles per gallon `mpg`
 mtcars %>%
   ggplot(.,aes(x=cyl,y=mpg))
 
-# # # we could also assign our plot to some variable and add to it later
+# # # # we could also assign our plot to some variable and add to it later
 # p<-mtcars %>%
 #   ggplot(.,aes(x=cyl,y=mpg))
 # 
@@ -60,6 +60,8 @@ Since we are plotting a categorical variable against a numeric variable using a 
 mtcars %>%
   ggplot(.,aes(x=cyl,y=mpg,group=cyl)) + # the group is used to define if we want to create a seperate boxplot for each level in a column i.e. category
   geom_boxplot() +
+  # facet_grid(am ~ vs) +
+  # geom_violin() +
   theme_minimal()
 
 ```
@@ -84,7 +86,7 @@ ggplot(data = melted_corr, aes(x=Var1, y=Var2, fill=value)) +
 
 ```
 
-To improve this visualization we may want to sort the plot dimensions (rows and columns) (e.g. using hierarchical clustering), only show a portion of the symmetric matrix (e.g. upper triangle) or change the color scales (e.g. change the color and only show correlations with p-value\<= 0.05).
+We could further improve visualization by only showing a portion of the symmetric matrix (e.g. upper triangle) and change the color scales to better highlight differences between positive and negative correlations (bonus: highlight correlations with p-value<= 0.05).
 
 Lets show part of the square symmetric correlation matrix and improve the color scales.
 
@@ -109,7 +111,53 @@ ggplot(data = melted_corr, aes(Var2, Var1, fill = value))+
 
 ```
 
-This is starting to look nice but we can better group related correlation patterns. We can do this using hierarchical clustering. The simplest way to do this is using the `heatmaply` `R` library.
+So far we have included numeric continuous variables and categorical ones in our visualization. It could be better only show correlations among continuous variables and show how the categorical designations in a separate panel.
+
+
+```{r}
+library(pheatmap)
+library(purrr)
+
+data<-mtcars 
+
+# we want to select categorical variables  for row meta data
+# lets define this as any variables with n unique values <= some percent of the total data rows 
+x<-mtcars$gear
+is_categorical<-function(x,cutoff=0.3){
+
+  (length(unique(x))/ length(x)) <= cutoff  
+  
+}
+
+
+cat_cols<-sapply(mtcars,is_categorical) %>%
+  names(.)[.]
+
+
+#purrr::map archive similar goal to lapply
+d2<-data %>%
+  select(one_of(cat_cols)) %>%
+  map(as.factor) %>%
+  bind_rows()  %>%# alternative to do.call/cbind pattern
+  data.frame()
+#add row names for indexing
+rownames(d2)<-rownames(data)
+
+#create fake column metadata
+d3<-data.frame(fake1 = rep(c('A','B'),length.out=ncol(data)))
+rownames(d3)<-colnames(data)
+
+
+pheatmap(
+  data %>% select(-one_of(cat_cols)),
+  annotation_row = d2,
+  annotation_col = d3,
+  cluster_cols = FALSE, # control clustering
+  cluster_rows = FALSE # # control clustering
+)
+```
+
+This is starting to look nice but we can better group related correlation patterns (i.e. sort the plot dimensions (rows and columns) based on similarity of patterns across all variable relationships). We can do this using hierarchical clustering. The simplest way to do this is using the `heatmaply` `R` library.
 
 ```{r,message=FALSE}
 library(heatmaply)
@@ -168,7 +216,7 @@ mod<-lm(mpg ~ disp ,data=mtcars)
 summary(mod)
 
 
-mod2<-lm(mpg ~ disp + cyl +disp:cyl,data=mtcars)
+mod2<-lm(mpg ~ disp + cyl + disp:cyl,data=mtcars)
 summary(mod2)
 
 #compare models
@@ -261,7 +309,7 @@ d2<-mod3_vif %>%
 library(dplyr)
 data<-data.frame(term=c(d1$term,d2$term) %>% unique()) %>%
   left_join(d1,by='term') %>%
-  full_join(d2,by='term')
+  full_join(d2,by='term') # left_join also works
 
 #fix NA in model missing terms. Note this obfuscates which terms are presnt in the model.
 data[is.na(data)]<-0

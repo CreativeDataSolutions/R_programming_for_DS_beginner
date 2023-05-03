@@ -470,6 +470,21 @@ NA    &lt;NA&gt;   NA       NA
 4    duck  TRUE    FALSE</code></pre>
 </div>
 </div>
+<p>We can do as follow to remove any columns with <code>all</code> values <code>== NA</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span>original_df</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>bad<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>all_missing_columns<span class="ot">&lt;-</span><span class="fu">colSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">==</span> <span class="fu">nrow</span>(df)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>df[,<span class="sc">!</span>all_missing_columns]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      pet bird friendly
+1     dog   NA     TRUE
+2  parrot TRUE     TRUE
+3 chicken TRUE     TRUE
+4    duck TRUE    FALSE</code></pre>
+</div>
+</div>
 </section>
 </section>
 <section id="lists" class="level2" data-number="2.2">
@@ -477,7 +492,7 @@ NA    &lt;NA&gt;   NA       NA
 <p>After <code>data.frames</code>, <code>lists</code> are the most commonly used data types in <code>R</code>. A list can be used to store different <code>types</code> of <code>datum</code> and of unequal lengths. We will learn more about <code>lists</code> later. For now lets compare lists to <code>data.frames</code>.</p>
 <p>Lets create a list and convert a convert a <code>data.frame</code> to a list.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>(df_list<span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">pet=</span>pet,<span class="at">bird =</span> bird,<span class="at">friendly =</span> friendly)) <span class="co"># name = value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>(df_list<span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">pet=</span>pet,<span class="at">bird =</span> bird,<span class="at">friendly =</span> friendly)) <span class="co"># name = value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$pet
 [1] "dog"     "parrot"  "chicken" "duck"   
@@ -488,44 +503,47 @@ $bird
 $friendly
 [1]  TRUE  TRUE  TRUE FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>(df_list2<span class="ot">&lt;-</span><span class="fu">as.list</span>(df)) <span class="co"># we can also convert a data.frame to a list</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>(df_list2<span class="ot">&lt;-</span><span class="fu">as.list</span>(df)) <span class="co"># we can also convert a data.frame to a list</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$pet
 [1] "dog"     "parrot"  "chicken" "duck"   
 
 $bird
-[1] FALSE  TRUE  TRUE  TRUE
+[1]   NA TRUE TRUE TRUE
 
 $friendly
-[1]  TRUE  TRUE  TRUE FALSE</code></pre>
+[1]  TRUE  TRUE  TRUE FALSE
+
+$bad
+[1] NA NA NA NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(df_list,df_list2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(df_list,df_list2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
+<pre><code>[1] FALSE</code></pre>
 </div>
 </div>
 <p>Similar to <code>data.frames</code> we can extract list elements based on their name.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df_list<span class="sc">$</span>pet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df_list<span class="sc">$</span>pet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "dog"     "parrot"  "chicken" "duck"   </code></pre>
 </div>
 </div>
 <p>We can also get items based on their numeric index (order in list).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df_list[<span class="dv">1</span>] <span class="co"># this returns the list element name and values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df_list[<span class="dv">1</span>] <span class="co"># this returns the list element name and values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$pet
 [1] "dog"     "parrot"  "chicken" "duck"   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df_list[[<span class="dv">1</span>]] <span class="co"># this returns only the values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>df_list[[<span class="dv">1</span>]] <span class="co"># this returns only the values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "dog"     "parrot"  "chicken" "duck"   </code></pre>
 </div>
 </div>
 <p>We can unpack all the elements in the list and return a <code>vector</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(df_list)  <span class="co">#notice mixed types are converted to strings (i.e. quoted text)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(df_list)  <span class="co">#notice mixed types are converted to strings (i.e. quoted text)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     pet1      pet2      pet3      pet4     bird1     bird2     bird3     bird4 
     "dog"  "parrot" "chicken"    "duck"   "FALSE"    "TRUE"    "TRUE"    "TRUE" 
@@ -539,8 +557,8 @@ friendly1 friendly2 friendly3 friendly4
 <p>Matrices (two dimensional table) and arrays (n dimensional table) are often used for specialized mathematical calculations. Matrices can be useful for organizing vectors into different dimensions.</p>
 <p>Lets represent a vector as table with custom number of rows and columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="ot">&lt;-</span><span class="fu">unlist</span>(df_list)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>(mat<span class="ot">&lt;-</span><span class="fu">matrix</span>(tmp,<span class="at">ncol=</span><span class="dv">3</span>)) <span class="co"># note this fills by columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="ot">&lt;-</span><span class="fu">unlist</span>(df_list)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>(mat<span class="ot">&lt;-</span><span class="fu">matrix</span>(tmp,<span class="at">ncol=</span><span class="dv">3</span>)) <span class="co"># note this fills by columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1]      [,2]    [,3]   
 [1,] "dog"     "FALSE" "TRUE" 
@@ -548,12 +566,12 @@ friendly1 friendly2 friendly3 friendly4
 [3,] "chicken" "TRUE"  "TRUE" 
 [4,] "duck"    "TRUE"  "FALSE"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix(tmp,ncol=3,byrow = TRUE)  #fill by row</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix(tmp,ncol=3,byrow = TRUE)  #fill by row</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Matrices are useful for many other purposes. Unlike <code>data.frame</code>s they do not store mixed types (i.e.&nbsp;when numeric and other types are mixed all values are <code>coerced</code> to <code>strings</code>).</p>
 <p>We can convert a matrix to a <code>data.frame</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>(df2<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(mat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>(df2<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(mat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       V1    V2    V3
 1     dog FALSE  TRUE
@@ -561,8 +579,8 @@ friendly1 friendly2 friendly3 friendly4
 3 chicken  TRUE  TRUE
 4    duck  TRUE FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(df2)<span class="ot">&lt;-</span><span class="fu">dimnames</span>(df)<span class="co"># set dimension names</span></span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df2) <span class="co"># notice our original types may have not been preserved</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(df2)<span class="ot">&lt;-</span><span class="fu">dimnames</span>(original_df)<span class="co"># set dimension names</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df2) <span class="co"># notice our original types may have not been preserved</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   4 obs. of  3 variables:
  $ pet     : chr  "dog" "parrot" "chicken" "duck"
@@ -572,7 +590,7 @@ friendly1 friendly2 friendly3 friendly4
 </div>
 <p>Lastly, we can compare <code>R</code> <code>objects</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(df,df2) <span class="co"># more advanced methods can show what is different</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(df,df2) <span class="co"># more advanced methods can show what is different</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>

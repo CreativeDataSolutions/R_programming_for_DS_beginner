@@ -191,6 +191,17 @@ df
 
 ```
 
+We can do as follow to remove any columns with `all` values `== NA`.
+
+```{r}
+df<-original_df
+df$bad<-NA
+all_missing_columns<-colSums(is.na(df)) == nrow(df)
+
+df[,!all_missing_columns]
+
+```
+
 ## Lists
 
 After `data.frames`, `lists` are the most commonly used data types in `R`. A list can be used to store different `types` of `datum` and of unequal lengths. We will learn more about `lists` later. For now lets compare lists to `data.frames`.
@@ -241,7 +252,7 @@ We can convert a matrix to a `data.frame`.
 
 ```{r}
 (df2<-as.data.frame(mat))
-dimnames(df2)<-dimnames(df)# set dimension names
+dimnames(df2)<-dimnames(original_df)# set dimension names
 str(df2) # notice our original types may have not been preserved
 ```
 
