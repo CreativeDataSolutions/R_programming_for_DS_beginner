@@ -9,7 +9,7 @@ params:
 
 # Reproducible reports
 
-![DALL·E 2023-04-12 21.10.39 - duck creating a reproducible report using the R programming language, colorful cartoon, solarpunk](imgs/reproducible_reports.png)
+![chatGPT 4 04/2024 - duck creating a reproducible report using the R programming language, colorful cartoon, solarpunk](imgs/reproducible_reports.png)
 
 ```{r,echo=FALSE}
 knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
@@ -20,7 +20,11 @@ library(dplyr)
 library(htmltools)
 ```
 
-![](imgs/reproducible_reports1.png) All of the examples you have seen so far have used [`rmarkdown`](https://rmarkdown.rstudio.com/) and [`quarto`](https://quarto.org/) to combine text and `R` code into reproducible documents. This powerful combination offers many options to combine code and text, which can be rendered in different formats and typeset in custom layouts.
+
+
+All of the examples you have seen so far have used [`rmarkdown`](https://rmarkdown.rstudio.com/) and [`quarto`](https://quarto.org/) to combine text and `R` code into reproducible documents. This powerful combination offers many options to combine code and text, which can be rendered in different formats and typeset in custom layouts.
+
+![](imgs/reproducible_reports1.png)
 
 If you look at the [source code](https://github.com/CreativeDataSolutions/R_programming_for_DS_beginner) of the examples you can see how [markdown](https://quarto.org/docs/authoring/markdown-basics.html) (text) and `R` code blocks have been combined. Next we will look at more examples of how we can seamlessly combine text and code, recreate data analysis results in different formats and create automated and `parameterized reports`.
 
@@ -66,27 +70,33 @@ Their are many options we can specify for our report using the `front matter` co
 
 For example, try adding the following block with your custom definitions and render the report.
 
-        ---
-        title: Reproducible reports
-        author: Best ever!
-        date: "04/1/2023"
-        ---
+```         
+    ---
+    title: Reproducible reports
+    author: Best ever!
+    date: "04/1/2023"
+    ---
+```
 
 We can also execute custom `R` code in the `front matter`.
 
-        ---
-        title: Reproducible reports
-        author: Your name goes here
-        date: "`r format(Sys.time(), '%B %d, %Y')`"
-        ---
+```         
+    ---
+    title: Reproducible reports
+    author: Your name goes here
+    date: "`r format(Sys.time(), '%B %d, %Y')`"
+    ---
+```
 
 The general format is as follows.
 
-        ---
-        key1: key1_value1
-          key1_child1: key1_child1_value
-        key2: key2_value1
-        ---
+```         
+    ---
+    key1: key1_value1
+      key1_child1: key1_child1_value
+    key2: key2_value1
+    ---
+```
 
 Check out the [quarto gallery](https://quarto.org/docs/gallery/) for more inspirational examples.
 
@@ -96,8 +106,10 @@ We can specify options for our code in the [`parameters`](https://quarto.org/doc
 
 The following sets the variable named `summarize_columns` to `TRUE` when we execute `R code` blocks, which we can use to dynamically modify our report.
 
-    params:
-      summarize_columns: TRUE
+```         
+params:
+  summarize_columns: TRUE
+```
 
 Now we can execute custom logic in our report's `code blocks` based on the values in the `params` variable.
 
@@ -117,21 +129,29 @@ HTML(.text)
 
 `Params` are useful to create custom reports. For example we can supply the parameters when rendering using command line arguments (run the flowing in the terminal).
 
-    quarto render reproducible_reports.qmd -P summarize_columns:FALSE
+```         
+quarto render reproducible_reports.qmd -P summarize_columns:FALSE
+```
 
 To make this more interesting, lets make the data a changeable parameter.
 
-    params:
-      summarize_columns: TRUE
-      report_data: 'mtcars'
+```         
+params:
+  summarize_columns: TRUE
+  report_data: 'mtcars'
+```
 
 We also need to modify how the data is scoped in our code on line `25`.
 
-    data_name<-ifelse(is.null(params$report_data),get('mtcars'),get(params$report_data))
+```         
+data_name<-ifelse(is.null(params$report_data),get('mtcars'),get(params$report_data))
+```
 
 Now let's recreate the report for another data set.
 
-    quarto render reproducible_reports.qmd -P report_data:'iris'
+```         
+quarto render reproducible_reports.qmd -P report_data:'iris'
+```
 
 In practice this example could define the `file path` for the custom data which needs to be loaded and analyzed.
 
@@ -192,9 +212,11 @@ The `gtExtras` package can be used to include custom `ggplot2` base [visualizati
 
 Quarto offers many [layout](https://quarto.org/docs/authoring/figures.html#figure-panels) options. The simplest control is based on the number of `columns` or `rows` we want the code results to fill. For example to create two figures side by side we can use the following.
 
-    ::: {layout-ncol=2}
-    <CODE>
-    :::
+```         
+::: {layout-ncol=2}
+<CODE>
+:::
+```
 
 ::: {layout-ncol="2"}
 ```{r}
@@ -226,7 +248,9 @@ plot(data[,2])
 
 Next let's add references to our report. We can specify the bibliography in the `front matter` as follows. Note this variable can also be set for all documents in the `_quarto.yml`.
 
-    bibliography: references.bib
+```         
+bibliography: references.bib
+```
 
 The `.bib` [BibTex format](https://fileinfo.com/extension/bib#:~:text=A%20BIB%20file%20is%20a,TEX) can be created using various tools and looked up for any `R library` using `citation('library')`. For example lets add a citation for the `R` `base` library to our report.
 
@@ -236,21 +260,25 @@ citation('base')
 
 We can add the following entry to `references.bib`.
 
-    @Manual{R,
-        title = {R: A Language and Environment for Statistical Computing},
-        author = {{R Core Team}},
-        organization = {R Foundation for Statistical Computing},
-        address = {Vienna, Austria},
-        year = {2022},
-        url = {https://www.R-project.org/},
-      }
+```         
+@Manual{R,
+    title = {R: A Language and Environment for Statistical Computing},
+    author = {{R Core Team}},
+    organization = {R Foundation for Statistical Computing},
+    address = {Vienna, Austria},
+    year = {2022},
+    url = {https://www.R-project.org/},
+  }
+```
 
 Now we can cite R using the following syntax `[@citation]`. We need to add an additional code block to define where the references should be rendered.
 
-    ## References
+```         
+## References
 
-    ::: {#refs}
-    :::
+::: {#refs}
+:::
+```
 
 The following report was created using [@R].
 

@@ -4,7 +4,7 @@
 knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
 ```
 
-![DALL·E 2023-04-12 21.07.04 - hydra with five heads, each head is a plot of a data frame using ggplot, cyberpunk, pie chart, bar graph](imgs/data_visualization.png)
+![chatGPT 4 04/2024 - hydra with five heads, each head is a plot of a data frame using ggplot, cyberpunk, pie chart, bar graph](imgs/data_visualization.png)
 
 While `R` is often described as a \~niche programming language (e.g. for statistics and bioinformatics), it shines for data visualization compared to other data analysis appropriate mainstream alternatives like `python` and `julia`. A major reason for this distinction is the `ggplot2` library and its support for the grammar of graphics, an expressive, composable and extensible way to build data visualizations.
 
@@ -53,12 +53,12 @@ mtcars %>%
 
 ## Box plot
 
-Since we are plotting a categorical variable against a numeric variable using a `box plot` might be more informative. We can also change the default theme of the global plot.
+Since we are plotting a categorical variable against a numeric variable, using a `box plot` might be more informative. We can also change the default theme of the global plot.
 
 ```{r}
 
 mtcars %>%
-  ggplot(.,aes(x=cyl,y=mpg,group=cyl)) + # the group is used to define if we want to create a seperate boxplot for each level in a column i.e. category
+  ggplot(.,aes(x=cyl,y=mpg,group=cyl)) + # the group is used to define if we want to create a separate boxplot for each level in a column i.e. category
   geom_boxplot() +
   # facet_grid(am ~ vs) +
   # geom_violin() +
@@ -86,7 +86,7 @@ ggplot(data = melted_corr, aes(x=Var1, y=Var2, fill=value)) +
 
 ```
 
-We could further improve visualization by only showing a portion of the symmetric matrix (e.g. upper triangle) and change the color scales to better highlight differences between positive and negative correlations (bonus: highlight correlations with p-value<= 0.05).
+We could further improve visualization by only showing a portion of the symmetric matrix (e.g. upper triangle) and change the color scales to better highlight differences between positive and negative correlations (bonus: highlight correlations with p-value\<= 0.05).
 
 Lets show part of the square symmetric correlation matrix and improve the color scales.
 
@@ -94,7 +94,7 @@ Lets show part of the square symmetric correlation matrix and improve the color 
 
 #plot the upper triangle
 corr[upper.tri(corr)]<-0# set to zero the opposite quadrant you want to show, the plot will flip the symmetric values
-melted_corr<-melt(corr)
+melted_corr<-melt(corr) # this a common operation when formatting data for complex plots
 
 ggplot(data = melted_corr, aes(Var2, Var1, fill = value))+
  geom_tile(color = "white")+
@@ -111,8 +111,7 @@ ggplot(data = melted_corr, aes(Var2, Var1, fill = value))+
 
 ```
 
-So far we have included numeric continuous variables and categorical ones in our visualization. It could be better only show correlations among continuous variables and show how the categorical designations in a separate panel.
-
+So far we have included numeric continuous variables and categorical ones in our visualization. It could be better only show correlations among continuous variables and show the categorical variable in a separate panel.
 
 ```{r}
 library(pheatmap)
@@ -198,9 +197,10 @@ Next it might be interesting to visualize how `cyl` impacts the relationship bet
 
 ```{r}
 p<-mtcars %>% 
-  mutate(cyl=as.factor(cyl)) %>% # convert to a factor to create sepearte models
+  mutate(cyl=as.factor(cyl)) %>% # convert to a factor to create separate models an use categorical colors
   ggplot(.,aes(x=disp,y=mpg,color=cyl)) +
   stat_smooth(method = 'lm') + #show linear model fit
+  geom_text(aes(label=rownames(mtcars))) +
   geom_point() + 
   theme_minimal()
 
@@ -211,11 +211,11 @@ This suggests that `mpg` is best explained by the combination of `disp` and `cyl
 
 ```{r}
 
-
-mod<-lm(mpg ~ disp ,data=mtcars)
+#model mpg given cyl
+mod<-lm(mpg ~ disp ,data=mtcars) # note formula input
 summary(mod)
 
-
+#model mpg given cyl, dsp and their interaction
 mod2<-lm(mpg ~ disp + cyl + disp:cyl,data=mtcars)
 summary(mod2)
 
@@ -249,7 +249,7 @@ Looking at the variable `types` and `levels` in each category is helpful to deci
 mtcars %>% 
  ggplot(.,aes(x=wt,y=mpg,size=qsec)) +
   geom_point() +
-  facet_grid(.~am) +
+  facet_grid(.~am) + # create subplots as columns 9or rows e.g. 'am~.'
   stat_smooth(method='lm',show.legend = FALSE) +
   theme_minimal()
          
@@ -333,6 +333,7 @@ d2<-mod3_vif %>%
 
 
 #we want to create two columns, one for each model's vif, for all terms
+#join ~combines data frame by matching a common row index (e.g. term here)
 data<-data.frame(term=c(d1$term,d2$term) %>% unique()) %>%
   left_join(d1,by='term') %>%
   left_join(d2,by='term')

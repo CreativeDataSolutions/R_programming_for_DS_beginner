@@ -4,7 +4,7 @@
 knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
 ```
 
-![DALL·E 2023-02-28 17.25.41 - a 4 headed hydra mythical creature, with heads of a dog, duck, parrot and chicken, cartoon style](imgs/data_types_header.png)
+![chatGPT 4 04/2024 - a 4 headed hydra mythical creature, with heads of a dog, duck, parrot and chicken, cartoon style](imgs/data_types_header.png)
 
 `R` uses different `types` to describe individual units of data, `datum`, and stores these in different `types` of `data objects`. The following examples are meant to get you up and running with common `R` data types and `data.frames`. Take a look in the [appendix](#appendix) for more comprehensive examples.
 
@@ -100,6 +100,7 @@ friendly<-c(TRUE,TRUE,TRUE,FALSE)# define characteristics of each pet
 pet[friendly & bird]
 
 ```
+`Exercise`: How would you select all unfriendly birds?
 
 ### Combining `datum` in `data objects`
 
@@ -112,7 +113,7 @@ The examples above created `vector`s for the various combinations of `datum`. A 
 We can check the dimensions, and column and row names of `data.frames` as follows.
 
 ```{r}
-dim(df)  
+dim(df) # rows columns 
 colnames(df)
 rownames(df)
 #note we can get both and column and row names using 'dimnames'
@@ -143,9 +144,9 @@ df[!df$pet %in% 'duck' & df$bird,]
 Note, we could have done this is in a more `programmatic` manner by operating on objects created from the individual calculations. This makes it easier to read your code and simplifies recalculations give changes in `input`s.
 
 ```{r}
-not_friendly_bird<-df[df$bird & !df$friendly,]$pet
+friendly_bird<-df$bird & df$friendly
 
-df[!df$pet %in% not_friendly_bird & df$bird,]
+df[friendly_bird,]
 
 ```
 
@@ -156,6 +157,7 @@ Missing values are denoted in `R` as `NA`. Note, other special definitions inclu
 Next lets add missing values to or data and retry some of the examples above to see what happens. To create missing values we will use a logical operation to select a specific row, select a column for that row and then assign to `NA`.
 
 ```{r}
+original_df<-df # save original data
 df[df$pet == 'dog',]$bird<-NA
 df
 ```
@@ -163,56 +165,62 @@ df
 Lets see what happens when we try select all friendly birds.
 
 ```{r}
-not_friendly_bird<-df[df$bird & !df$friendly,]$pet
-
-df[!df$pet %in% not_friendly_bird & df$bird,]
+friendly_bird<-df$bird & df$friendly
+df[friendly_bird,]
 ```
 
 Notice the `NA` is propagated in the results which can later cause errors.
 
-We can omit the `NA` either before (recommended) or after the calculation.
+We can omit the `NA` either before (easiest) or after the calculation.
 
 ```{r}
-original_df<-df # save original data
 df<-na.omit(df) # remove all columns and/or rows with a missing value
 
 #notice we want to recalculate the original logical operators for the new data since it changed shape
-not_friendly_bird<-df[df$bird & !df$friendly,]$pet
-df[!df$pet %in% not_friendly_bird & df$bird,]
+friendly_bird<-df$bird & df$friendly
+df[friendly_bird,]
 ```
 
-We can also check if a row or a column has an `NA` and treated in a custom manner. For example we can fix it.
+We can also check if a row or a column has an `NA` and treated in a custom manner. For example we can replace it.
 
 ```{r}
-df<-original_df
+df<-original_df # recreate missing value
+df[df$pet == 'dog',]$bird<-NA
 
-df[is.na(df$bird),]$bird<-FALSE
+#replace
+df[is.na(df)]<-FALSE
 df
-
 ```
 
-We can do as follow to remove any columns with `all` values `== NA`.
+We can do as follow to remove any columns with `all` values `== NA`. 
 
 ```{r}
+#create a bad column
 df<-original_df
 df$bad<-NA
+df
+
+#check for missing
 all_missing_columns<-colSums(is.na(df)) == nrow(df)
-
+#remove any columns meeting missing criteria
 df[,!all_missing_columns]
-
 ```
+In the example above we created a new column named 'bad', assigned all its values to `NA` (missing),  counted the number of missing values in each column, evaluated if the number of missing is equal to the number of rows and then removed any columns meeting these criteria from the `data.frame`.
+
+`Exercise`: How would you remove columns with greater than some`%` missing values?
+
 
 ## Lists
 
 After `data.frames`, `lists` are the most commonly used data types in `R`. A list can be used to store different `types` of `datum` and of unequal lengths. We will learn more about `lists` later. For now lets compare lists to `data.frames`.
 
-Lets create a list and convert a convert a `data.frame` to a list.
+Lets first create a list and then convert a `data.frame` to a list.
 
 ```{r}
 (df_list<- list(pet=pet,bird = bird,friendly = friendly)) # name = value
-(df_list2<-as.list(df)) # we can also convert a data.frame to a list
+df_list2<-as.list(original_df) # we can also convert a data.frame to a list
 
-identical(df_list,df_list2)
+message('The two lists are identical: ',identical(df_list,df_list2)) # we can check an assertion and print
 ```
 
 Similar to `data.frames` we can extract list elements based on their name.
@@ -236,7 +244,7 @@ unlist(df_list)  #notice mixed types are converted to strings (i.e. quoted text)
 
 ## Matrices and Arrays
 
-Matrices (two dimensional table) and arrays (n dimensional table) are often used for specialized mathematical calculations. Matrices can be useful for organizing vectors into different dimensions.
+Matrices (`2` dimensional tables) and arrays (`n` dimensional table) are often used for specialized mathematical calculations. Matrices can be useful for organizing vectors into different dimensions.
 
 Lets represent a vector as table with custom number of rows and columns.
 
@@ -251,15 +259,17 @@ Matrices are useful for many other purposes. Unlike `data.frame`s they do not st
 We can convert a matrix to a `data.frame`.
 
 ```{r}
-(df2<-as.data.frame(mat))
+df2<-as.data.frame(mat)
 dimnames(df2)<-dimnames(original_df)# set dimension names
+df2
 str(df2) # notice our original types may have not been preserved
 ```
 
-Lastly, we can compare `R` `objects`.
+Lastly, we can compare `R` `objects`. This is very useful for debugging why some examples work and others don't.
 
 ```{r}
-identical(df,df2) # more advanced methods can show what is different
+identical(original_df,df2) # more advanced methods can show what is different
+all.equal(original_df,df2)
 ```
 
 ## Appendix {#appendix}

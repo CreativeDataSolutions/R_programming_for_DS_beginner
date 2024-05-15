@@ -4,18 +4,45 @@
 knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
 ```
 
-![DALL·E 2023-04-12 20.55.50 - hacker unicorn writing R code using the Rstudio IDE, cyberpunk](imgs/rstudio.png)
+![chatGPT 4 04/24 - hacker unicorn writing R code using the Rstudio IDE, cyberpunk](imgs/rstudio.png)
 
-[Rstudio](https://posit.co/products/open-source/rstudio/) is one the most comprehensive free interactive development environments (IDE) for `R`. 
+[Rstudio](https://posit.co/products/open-source/rstudio/) is one the most comprehensive free interactive development environments (IDE) for `R`.
 
 The following [reference](https://education.rstudio.com/learn/beginner/) covers he major steps to install and configure your `R studio`.
 
 Major steps include:
 
-* install the latest version of [R](https://cran.r-project.org/)
-* install [Rstudio](https://posit.co/products/open-source/rstudio/)
-* configure `Rstudio` defaults and appearance
+-   install the latest version of [R](https://cran.r-project.org/)
+-   install [Rstudio](https://posit.co/products/open-source/rstudio/)
+-   configure `Rstudio` defaults and appearance
 
-Once you have `Rstudio` installed you can select `Tools` >> `Global options` and configure your preferences e.g. `apperance`.
+Once you have `Rstudio` installed you can select `Tools` \>\> `Global options` and configure your preferences e.g. `apperance`.
 
-
+### Install `R` packages used for the examples
+```{r,eval=FALSE}
+pkgs <-
+  c(
+    'dplyr',
+    'tidyr',
+    'datasets',
+    'skimr',
+    'summarytools',
+    'ggplot2',
+    'ggrepel',
+    'reshape2',
+    'GGally',
+    'plotly',
+    'RColorBrewer',
+    'pheatmap',
+    'purrr',
+    'heatmaply',
+    'car',
+    'ggalt',
+    'Metrics',
+    'patchwork',
+    'htmltools',
+    'formattable',
+    'DT'
+  )
+install.packages(pkgs)
+```

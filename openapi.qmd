@@ -18,8 +18,7 @@ There is a lot of hype around tools like `chatGPT` which is a class of `large la
 
 ```{r}
 # install.packages(c("gptstudio","waiter"))
-library(gptstudio)
-
+# library(gptstudio)
 ```
 
 ## `chatGPT` Rstudio add in

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,9 +17,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -46,43 +47,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -120,7 +91,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -132,11 +104,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data types</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data_types.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data types</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -144,80 +121,89 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">R programming for Data Science - A Beginner’s Guide</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./R_studio.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Rstudio</span></a>
+  <a href="./R_studio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Rstudio</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data_types.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data types</span></a>
+  <a href="./data_types.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data types</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Wrangling</span></a>
+  <a href="./data_wrangling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Wrangling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ggplot2_intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting for data analysis</span></a>
+  <a href="./ggplot2_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting for data analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./eda.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Exploratory Data Analysis</span></a>
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Exploratory Data Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reproducible_reports.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Reproducible reports</span></a>
+  <a href="./reproducible_reports.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Reproducible reports</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./openapi.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">AI coding help</span></a>
+  <a href="./openapi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">AI coding help</span></span></a>
   </div>
 </li>
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#hands-on" id="toc-hands-on" class="nav-link active" data-scroll-target="#hands-on"><span class="toc-section-number">2.1</span>  Hands on</a>
+  <li><a href="#hands-on" id="toc-hands-on" class="nav-link active" data-scroll-target="#hands-on"><span class="header-section-number">2.1</span> Hands on</a>
   <ul class="collapse">
-  <li><a href="#making-datum" id="toc-making-datum" class="nav-link" data-scroll-target="#making-datum"><span class="toc-section-number">2.1.1</span>  Making <code>datum</code></a></li>
-  <li><a href="#introspection" id="toc-introspection" class="nav-link" data-scroll-target="#introspection"><span class="toc-section-number">2.1.2</span>  Introspection</a></li>
-  <li><a href="#combining-datum" id="toc-combining-datum" class="nav-link" data-scroll-target="#combining-datum"><span class="toc-section-number">2.1.3</span>  Combining <code>datum</code></a></li>
-  <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types"><span class="toc-section-number">2.1.4</span>  <code>Data types</code></a></li>
-  <li><a href="#combining-datum-in-data-objects" id="toc-combining-datum-in-data-objects" class="nav-link" data-scroll-target="#combining-datum-in-data-objects"><span class="toc-section-number">2.1.5</span>  Combining <code>datum</code> in <code>data objects</code></a></li>
-  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values"><span class="toc-section-number">2.1.6</span>  Missing values</a></li>
+  <li><a href="#making-datum" id="toc-making-datum" class="nav-link" data-scroll-target="#making-datum"><span class="header-section-number">2.1.1</span> Making <code>datum</code></a></li>
+  <li><a href="#introspection" id="toc-introspection" class="nav-link" data-scroll-target="#introspection"><span class="header-section-number">2.1.2</span> Introspection</a></li>
+  <li><a href="#combining-datum" id="toc-combining-datum" class="nav-link" data-scroll-target="#combining-datum"><span class="header-section-number">2.1.3</span> Combining <code>datum</code></a></li>
+  <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types"><span class="header-section-number">2.1.4</span> <code>Data types</code></a></li>
+  <li><a href="#combining-datum-in-data-objects" id="toc-combining-datum-in-data-objects" class="nav-link" data-scroll-target="#combining-datum-in-data-objects"><span class="header-section-number">2.1.5</span> Combining <code>datum</code> in <code>data objects</code></a></li>
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values"><span class="header-section-number">2.1.6</span> Missing values</a></li>
   </ul></li>
-  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="toc-section-number">2.2</span>  Lists</a></li>
-  <li><a href="#matrices-and-arrays" id="toc-matrices-and-arrays" class="nav-link" data-scroll-target="#matrices-and-arrays"><span class="toc-section-number">2.3</span>  Matrices and Arrays</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="toc-section-number">2.4</span>  Appendix</a></li>
+  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="header-section-number">2.2</span> Lists</a></li>
+  <li><a href="#matrices-and-arrays" id="toc-matrices-and-arrays" class="nav-link" data-scroll-target="#matrices-and-arrays"><span class="header-section-number">2.3</span> Matrices and Arrays</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">2.4</span> Appendix</a></li>
   </ul>
 </nav>
     </div>
@@ -226,7 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data types</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data types</span></h1>
 </div>
 
 
@@ -234,19 +220,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
 
 </header>
 
-<div class="cell">
-
-</div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="imgs/data_types_header.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">DALL·E 2023-02-28 17.25.41 - a 4 headed hydra mythical creature, with heads of a dog, duck, parrot and chicken, cartoon style</figcaption><p></p>
+<figcaption class="figure-caption">chatGPT 4 04/2024 - a 4 headed hydra mythical creature, with heads of a dog, duck, parrot and chicken, cartoon style</figcaption>
 </figure>
 </div>
 <p><code>R</code> uses different <code>types</code> to describe individual units of data, <code>datum</code>, and stores these in different <code>types</code> of <code>data objects</code>. The following examples are meant to get you up and running with common <code>R</code> data types and <code>data.frames</code>. Take a look in the <a href="#appendix">appendix</a> for more comprehensive examples.</p>
@@ -347,6 +331,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>[1] "parrot"  "chicken"</code></pre>
 </div>
 </div>
+<p><code>Exercise</code>: How would you select all unfriendly birds?</p>
 </section>
 <section id="combining-datum-in-data-objects" class="level3" data-number="2.1.5">
 <h3 data-number="2.1.5" class="anchored" data-anchor-id="combining-datum-in-data-objects"><span class="header-section-number">2.1.5</span> Combining <code>datum</code> in <code>data objects</code></h3>
@@ -363,7 +348,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>We can check the dimensions, and column and row names of <code>data.frames</code> as follows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df) <span class="co"># rows columns </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4 3</code></pre>
 </div>
@@ -404,9 +389,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Note, we could have done this is in a more <code>programmatic</code> manner by operating on objects created from the individual calculations. This makes it easier to read your code and simplifies recalculations give changes in <code>input</code>s.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>not_friendly_bird<span class="ot">&lt;-</span>df[df<span class="sc">$</span>bird <span class="sc">&amp;</span> <span class="sc">!</span>df<span class="sc">$</span>friendly,]<span class="sc">$</span>pet</span>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>friendly_bird<span class="ot">&lt;-</span>df<span class="sc">$</span>bird <span class="sc">&amp;</span> df<span class="sc">$</span>friendly</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>df[<span class="sc">!</span>df<span class="sc">$</span>pet <span class="sc">%in%</span> not_friendly_bird <span class="sc">&amp;</span> df<span class="sc">$</span>bird,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>df[friendly_bird,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      pet bird friendly
 2  parrot TRUE     TRUE
@@ -419,8 +404,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Missing values are denoted in <code>R</code> as <code>NA</code>. Note, other special definitions include <code>Inf</code>,<code>-Inf</code>, <code>NaN</code> and <code>NULL</code>, interpreted as positive and negative <code>infinity</code>, <code>not a number</code> and <code>undefined</code>, respectively. Missing values need to be <code>omitted</code>, <code>imputed</code> or handled in <code>functions</code> else these can cause errors or will be propagated as <code>NA</code>.</p>
 <p>Next lets add missing values to or data and retry some of the examples above to see what happens. To create missing values we will use a logical operation to select a specific row, select a column for that row and then assign to <code>NA</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>pet <span class="sc">==</span> <span class="st">'dog'</span>,]<span class="sc">$</span>bird<span class="ot">&lt;-</span><span class="cn">NA</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>original_df<span class="ot">&lt;-</span>df <span class="co"># save original data</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>pet <span class="sc">==</span> <span class="st">'dog'</span>,]<span class="sc">$</span>bird<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      pet bird friendly
 1     dog   NA     TRUE
@@ -431,9 +417,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Lets see what happens when we try select all friendly birds.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>not_friendly_bird<span class="ot">&lt;-</span>df[df<span class="sc">$</span>bird <span class="sc">&amp;</span> <span class="sc">!</span>df<span class="sc">$</span>friendly,]<span class="sc">$</span>pet</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>df[<span class="sc">!</span>df<span class="sc">$</span>pet <span class="sc">%in%</span> not_friendly_bird <span class="sc">&amp;</span> df<span class="sc">$</span>bird,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>friendly_bird<span class="ot">&lt;-</span>df<span class="sc">$</span>bird <span class="sc">&amp;</span> df<span class="sc">$</span>friendly</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>df[friendly_bird,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       pet bird friendly
 NA    &lt;NA&gt;   NA       NA
@@ -442,26 +427,27 @@ NA    &lt;NA&gt;   NA       NA
 </div>
 </div>
 <p>Notice the <code>NA</code> is propagated in the results which can later cause errors.</p>
-<p>We can omit the <code>NA</code> either before (recommended) or after the calculation.</p>
+<p>We can omit the <code>NA</code> either before (easiest) or after the calculation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>original_df<span class="ot">&lt;-</span>df <span class="co"># save original data</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">na.omit</span>(df) <span class="co"># remove all columns and/or rows with a missing value</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#notice we want to recalculate the original logical operators for the new data since it changed shape</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>not_friendly_bird<span class="ot">&lt;-</span>df[df<span class="sc">$</span>bird <span class="sc">&amp;</span> <span class="sc">!</span>df<span class="sc">$</span>friendly,]<span class="sc">$</span>pet</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>df[<span class="sc">!</span>df<span class="sc">$</span>pet <span class="sc">%in%</span> not_friendly_bird <span class="sc">&amp;</span> df<span class="sc">$</span>bird,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">na.omit</span>(df) <span class="co"># remove all columns and/or rows with a missing value</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#notice we want to recalculate the original logical operators for the new data since it changed shape</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>friendly_bird<span class="ot">&lt;-</span>df<span class="sc">$</span>bird <span class="sc">&amp;</span> df<span class="sc">$</span>friendly</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>df[friendly_bird,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      pet bird friendly
 2  parrot TRUE     TRUE
 3 chicken TRUE     TRUE</code></pre>
 </div>
 </div>
-<p>We can also check if a row or a column has an <code>NA</code> and treated in a custom manner. For example we can fix it.</p>
+<p>We can also check if a row or a column has an <code>NA</code> and treated in a custom manner. For example we can replace it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span>original_df</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">is.na</span>(df<span class="sc">$</span>bird),]<span class="sc">$</span>bird<span class="ot">&lt;-</span><span class="cn">FALSE</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span>original_df <span class="co"># recreate missing value</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>pet <span class="sc">==</span> <span class="st">'dog'</span>,]<span class="sc">$</span>bird<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#replace</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">is.na</span>(df)]<span class="ot">&lt;-</span><span class="cn">FALSE</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      pet  bird friendly
 1     dog FALSE     TRUE
@@ -472,27 +458,39 @@ NA    &lt;NA&gt;   NA       NA
 </div>
 <p>We can do as follow to remove any columns with <code>all</code> values <code>== NA</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span>original_df</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>bad<span class="ot">&lt;-</span><span class="cn">NA</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>all_missing_columns<span class="ot">&lt;-</span><span class="fu">colSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">==</span> <span class="fu">nrow</span>(df)</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>df[,<span class="sc">!</span>all_missing_columns]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a bad column</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span>original_df</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>bad<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      pet bird friendly
-1     dog   NA     TRUE
-2  parrot TRUE     TRUE
-3 chicken TRUE     TRUE
-4    duck TRUE    FALSE</code></pre>
+<pre><code>      pet  bird friendly bad
+1     dog FALSE     TRUE  NA
+2  parrot  TRUE     TRUE  NA
+3 chicken  TRUE     TRUE  NA
+4    duck  TRUE    FALSE  NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check for missing</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>all_missing_columns<span class="ot">&lt;-</span><span class="fu">colSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">==</span> <span class="fu">nrow</span>(df)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co">#remove any columns meeting missing criteria</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>df[,<span class="sc">!</span>all_missing_columns]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      pet  bird friendly
+1     dog FALSE     TRUE
+2  parrot  TRUE     TRUE
+3 chicken  TRUE     TRUE
+4    duck  TRUE    FALSE</code></pre>
 </div>
 </div>
+<p>In the example above we created a new column named ‘bad’, assigned all its values to <code>NA</code> (missing), counted the number of missing values in each column, evaluated if the number of missing is equal to the number of rows and then removed any columns meeting these criteria from the <code>data.frame</code>.</p>
+<p><code>Exercise</code>: How would you remove columns with greater than some<code>%</code> missing values?</p>
 </section>
 </section>
 <section id="lists" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="lists"><span class="header-section-number">2.2</span> Lists</h2>
 <p>After <code>data.frames</code>, <code>lists</code> are the most commonly used data types in <code>R</code>. A list can be used to store different <code>types</code> of <code>datum</code> and of unequal lengths. We will learn more about <code>lists</code> later. For now lets compare lists to <code>data.frames</code>.</p>
-<p>Lets create a list and convert a convert a <code>data.frame</code> to a list.</p>
+<p>Lets first create a list and then convert a <code>data.frame</code> to a list.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>(df_list<span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">pet=</span>pet,<span class="at">bird =</span> bird,<span class="at">friendly =</span> friendly)) <span class="co"># name = value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>(df_list<span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">pet=</span>pet,<span class="at">bird =</span> bird,<span class="at">friendly =</span> friendly)) <span class="co"># name = value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$pet
 [1] "dog"     "parrot"  "chicken" "duck"   
@@ -503,47 +501,32 @@ $bird
 $friendly
 [1]  TRUE  TRUE  TRUE FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>(df_list2<span class="ot">&lt;-</span><span class="fu">as.list</span>(df)) <span class="co"># we can also convert a data.frame to a list</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$pet
-[1] "dog"     "parrot"  "chicken" "duck"   
-
-$bird
-[1]   NA TRUE TRUE TRUE
-
-$friendly
-[1]  TRUE  TRUE  TRUE FALSE
-
-$bad
-[1] NA NA NA NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(df_list,df_list2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df_list2<span class="ot">&lt;-</span><span class="fu">as.list</span>(original_df) <span class="co"># we can also convert a data.frame to a list</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">'The two lists are identical: '</span>,<span class="fu">identical</span>(df_list,df_list2)) <span class="co"># we can check an assertion and print</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Similar to <code>data.frames</code> we can extract list elements based on their name.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df_list<span class="sc">$</span>pet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>df_list<span class="sc">$</span>pet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "dog"     "parrot"  "chicken" "duck"   </code></pre>
 </div>
 </div>
 <p>We can also get items based on their numeric index (order in list).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df_list[<span class="dv">1</span>] <span class="co"># this returns the list element name and values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>df_list[<span class="dv">1</span>] <span class="co"># this returns the list element name and values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$pet
 [1] "dog"     "parrot"  "chicken" "duck"   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>df_list[[<span class="dv">1</span>]] <span class="co"># this returns only the values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>df_list[[<span class="dv">1</span>]] <span class="co"># this returns only the values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "dog"     "parrot"  "chicken" "duck"   </code></pre>
 </div>
 </div>
 <p>We can unpack all the elements in the list and return a <code>vector</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(df_list)  <span class="co">#notice mixed types are converted to strings (i.e. quoted text)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(df_list)  <span class="co">#notice mixed types are converted to strings (i.e. quoted text)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     pet1      pet2      pet3      pet4     bird1     bird2     bird3     bird4 
     "dog"  "parrot" "chicken"    "duck"   "FALSE"    "TRUE"    "TRUE"    "TRUE" 
@@ -554,11 +537,11 @@ friendly1 friendly2 friendly3 friendly4
 </section>
 <section id="matrices-and-arrays" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="matrices-and-arrays"><span class="header-section-number">2.3</span> Matrices and Arrays</h2>
-<p>Matrices (two dimensional table) and arrays (n dimensional table) are often used for specialized mathematical calculations. Matrices can be useful for organizing vectors into different dimensions.</p>
+<p>Matrices (<code>2</code> dimensional tables) and arrays (<code>n</code> dimensional table) are often used for specialized mathematical calculations. Matrices can be useful for organizing vectors into different dimensions.</p>
 <p>Lets represent a vector as table with custom number of rows and columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="ot">&lt;-</span><span class="fu">unlist</span>(df_list)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>(mat<span class="ot">&lt;-</span><span class="fu">matrix</span>(tmp,<span class="at">ncol=</span><span class="dv">3</span>)) <span class="co"># note this fills by columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="ot">&lt;-</span><span class="fu">unlist</span>(df_list)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>(mat<span class="ot">&lt;-</span><span class="fu">matrix</span>(tmp,<span class="at">ncol=</span><span class="dv">3</span>)) <span class="co"># note this fills by columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1]      [,2]    [,3]   
 [1,] "dog"     "FALSE" "TRUE" 
@@ -566,21 +549,22 @@ friendly1 friendly2 friendly3 friendly4
 [3,] "chicken" "TRUE"  "TRUE" 
 [4,] "duck"    "TRUE"  "FALSE"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix(tmp,ncol=3,byrow = TRUE)  #fill by row</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix(tmp,ncol=3,byrow = TRUE)  #fill by row</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Matrices are useful for many other purposes. Unlike <code>data.frame</code>s they do not store mixed types (i.e.&nbsp;when numeric and other types are mixed all values are <code>coerced</code> to <code>strings</code>).</p>
 <p>We can convert a matrix to a <code>data.frame</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>(df2<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(mat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>df2<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(mat)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(df2)<span class="ot">&lt;-</span><span class="fu">dimnames</span>(original_df)<span class="co"># set dimension names</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       V1    V2    V3
-1     dog FALSE  TRUE
-2  parrot  TRUE  TRUE
-3 chicken  TRUE  TRUE
-4    duck  TRUE FALSE</code></pre>
+<pre><code>      pet  bird friendly
+1     dog FALSE     TRUE
+2  parrot  TRUE     TRUE
+3 chicken  TRUE     TRUE
+4    duck  TRUE    FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(df2)<span class="ot">&lt;-</span><span class="fu">dimnames</span>(original_df)<span class="co"># set dimension names</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df2) <span class="co"># notice our original types may have not been preserved</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df2) <span class="co"># notice our original types may have not been preserved</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   4 obs. of  3 variables:
  $ pet     : chr  "dog" "parrot" "chicken" "duck"
@@ -588,11 +572,20 @@ friendly1 friendly2 friendly3 friendly4
  $ friendly: chr  "TRUE" "TRUE" "TRUE" "FALSE"</code></pre>
 </div>
 </div>
-<p>Lastly, we can compare <code>R</code> <code>objects</code>.</p>
+<p>Lastly, we can compare <code>R</code> <code>objects</code>. This is very useful for debugging why some examples work and others don’t.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(df,df2) <span class="co"># more advanced methods can show what is different</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(original_df,df2) <span class="co"># more advanced methods can show what is different</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(original_df,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Attributes: &lt; Component \"row.names\": Modes: numeric, character &gt;"              
+[2] "Attributes: &lt; Component \"row.names\": target is numeric, current is character &gt;"
+[3] "Component \"bird\": Modes: logical, character"                                   
+[4] "Component \"bird\": target is logical, current is character"                     
+[5] "Component \"friendly\": Modes: logical, character"                               
+[6] "Component \"friendly\": target is logical, current is character"                 </code></pre>
 </div>
 </div>
 </section>
@@ -634,9 +627,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -648,7 +655,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -684,24 +708,128 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

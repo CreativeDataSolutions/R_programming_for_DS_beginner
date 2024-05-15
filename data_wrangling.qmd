@@ -4,7 +4,7 @@
 knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
 ```
 
-![DALL·E 2023-04-12 21.00.44 - data wrangling, rodeo cowboy panda, code, data frame, solarpunk, colorful](imgs/data_wrangling.png)
+![chatGPT 4 - data wrangling, rodeo cowboy panda, code, data frame, cyberpunk, colorful, ethereal holograms of data frame wrangling](imgs/data_wrangling.png)
 
 ```{r,echo=FALSE}
 knitr::opts_chunk$set(warning = FALSE,message = FALSE) # set global chunk options
@@ -26,7 +26,7 @@ While we will work with demo data for the rest of the examples, in practice you 
 Take a look at some available data sets in the `datastes` `R` package.
 
 ```{r}
-if(!require(datasets)) install.packages('datasets') #install package for the first time
+if(!require(datasets)) install.packages('datasets') #install package for the first time 
 library(datasets) # load package in session
 
 .data<-data()
@@ -84,7 +84,9 @@ my_summary<-mtcars %>%
 my_summary
 ```
 
-A better format could be to output the results as columns for each row which correspond to the original columns in the data. We can check the [`dplyr`cheat-sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) to see what other data wrangling operations this package enables.
+We used the `summarise_each` function to calculate a `function` (e.g. mean, sd) on each column and return the results as a `data.frame`. We will later learn more about `functions`.
+
+A better format could be to output the results as columns for each row which correspond to the original columns in the data. We can check the [`dplyr`cheat-sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) to see what other data wrangling operations this package enables. We will use `dplyr` column select functions to select and manipulate elements in the `data.frame` based on the column names.
 
 ```{r}
 means <- my_summary %>%
@@ -97,7 +99,7 @@ stdevs <- my_summary %>%
 
 (my_summary2 <-
     data.frame(
-      variable = colnames(mtcars),
+      variable = colnames(mtcars), # create new variable
       mean = means,
       stdev = stdevs
     ))
@@ -174,7 +176,7 @@ Note, it can also be useful to call a functions by their `string` names using `d
 
 ## Loops
 
-When we executed a function over each column this is executed by looping the calculation `n` number of times where `n` is equal to the number of columns. While modern libraries like `dplyr`, `tidyr` and `purrr` do this internally, it is useful to understand how to create your own loops. The simplest way to `loop` is using the `for` function. Note `R` is a vectorized language and looping is often discouraged because its much slower; this approach is still very useful for prototyping complex and simpler to read, understand and debug code.
+When we executed a function over each column this is executed by looping the calculation `n` number of times where `n` is equal to the number of columns. While modern libraries like `dplyr`, `tidyr` and `purrr` do this internally. Next lets explore how to create `loop`s. The simplest way to `loop` is using the `for` function. Note `R` is a vectorized language and looping is often discouraged because its much slower; this approach is still very useful for prototyping complex and simpler to read, understand and debug code.
 
 Lets use `apply` to mimic `summarise`.
 
@@ -220,7 +222,7 @@ Next, we will build on our function to create summaries for groups of rows. Lets
 
 
 
-#we need to regenerate our our original analysis
+#we need to regenerate our original analysis
 #we can take this opportunity to functionalize all the steps
 #1) calculate mean and standard deviation of each column
 #2) pivot data
@@ -286,7 +288,7 @@ class(mtcars$cyl) #we want to convert this class to a factor
 str(as.factor(mtcars$cyl))
 
 
-#we could A) create a custom loop or B) modify our origin to handle a grouping variable
+#we could A) create a custom loop or B) modify our original one to handle a grouping variable
 
 #A) 
 #we will split the data into list elements for each group and execute our simple workflow 
@@ -315,6 +317,33 @@ tmp %>%
 #   group_by(groups) %>%
 #   column_summary() %>%
 #   transpose_on_suffix(.) # our original function needs to keep track of grouping variable levels. An easy solution is not obvious.
+```
+
+## Reshaping 
+Reshaping is the act of changing data structure between `long` and `wide` formats. We might call the conversion from `wide` to `long` as `melt`ing and from `long` to `wide` as `pivoting` or `casting` our data. These operations are particularly useful for data visualization. Lets briefly take a look at some examples below.
+
+In a `wide` format every row represents a unique sample and columns are the samples descriptors or measurements. 
+
+```{r}
+head(mtcars)# wide
+```
+We can transform this into a `long` format wherein we have multiple rows per sample.
+
+```{r}
+library(reshape2)
+
+#add our sample index to the data ... note alternative functions can do this automatically
+
+df<-mtcars
+df$name<-row.names(df)
+
+melted_df <-melt(df,id.vars = 'name')
+head(melted_df)
+```
+We will explore why and how this is useful in the upcoming lessons. For now lets convert the `long` data to a `wide` format.
+
+```{r}
+head(dcast(melted_df,name ~ variable)) # this uses a formula (e.g. 'name ~ variable') which we will explore in a later section
 ```
 
 ## Error handling
@@ -355,7 +384,7 @@ Note, an alternative is to use the `purrr:safely` [function](https://r4ds.had.co
 
 ## Debugging
 
-Debugging is the act of investigating how code functions or what causes errors. The `browser` and `debug` functions can be used to interactively run code and view its state.
+Debugging is the act of investigating the logic of code and/or verifying its correctness. The `browser` and `debug` functions can be used to interactively run code and view its state.
 
 ```{r}
 
@@ -367,7 +396,7 @@ f<-function(x){
   
 }
 
-f(2)
+# f(2) # uncomment to run
 
 #debug will sets a breakpoint any time a given function is run
 
@@ -378,7 +407,7 @@ f<-function(x){
   
 }
 
-debug(f)
+# debug(f) # uncomment to run
 
 f(2)
 ```
@@ -419,3 +448,4 @@ Data wrangling is an inherent task for every data science workflow. We will buil
 ## Appendix
 
 -   [R for Data Science](https://r4ds.had.co.nz/index.html)
+-   [Reshaping](https://ademos.people.uic.edu/Chapter8.html#14_melting)
