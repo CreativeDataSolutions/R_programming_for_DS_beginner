@@ -20,8 +20,6 @@ library(dplyr)
 library(htmltools)
 ```
 
-
-
 All of the examples you have seen so far have used [`rmarkdown`](https://rmarkdown.rstudio.com/) and [`quarto`](https://quarto.org/) to combine text and `R` code into reproducible documents. This powerful combination offers many options to combine code and text, which can be rendered in different formats and typeset in custom layouts.
 
 ![](imgs/reproducible_reports1.png)
@@ -124,7 +122,8 @@ if(exists('params') && params$summarize_columns){
   #Unicode Characters: https://www.w3schools.com/charsets/ref_utf_dingbats.asp
 }
 
-HTML(.text)
+# HTML(.text) #optimized for browsers
+# cat(.text) # simple text
 ```
 
 `Params` are useful to create custom reports. For example we can supply the parameters when rendering using command line arguments (run the flowing in the terminal).

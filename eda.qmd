@@ -123,7 +123,7 @@ mtcars %>%
 
 ## Multivariate Analysis
 
-Next lets visualize sample (row) trends given all variables (columns) using `principal components analysis` (`PCA`). First, lets calculate the principal components and visualize their variance explained.
+Next lets visualize sample (row) trends given all variables (columns) using `principal components analysis` (`PCA`). PCA is a powerful technique to identify unknown patterns and/or evaluate assumptions about your data.  First, lets calculate the principal components and visualize their variance explained.
 
 ```{r}
 #calculate and show eigenvalue summary
@@ -348,3 +348,5 @@ p + guides(color=guide_legend(title="number of cylinders"))
 
 -   [summarytools](https://htmlpreview.github.io/?https://github.com/dcomtois/summarytools/blob/master/doc/introduction.html)
 -   [skimr](https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html)
+- [Multivariate Analysis - intermediate](https://www.slideshare.net/slideshow/algae-workshop-data-analysis-1-130528/22629583)
+-   [Multivariate Analysis - advanced](https://www.slideshare.net/slideshow/algae-workshop-data-analysis-2-130528/22629753)
