@@ -19,6 +19,7 @@ Major steps include:
 Once you have `Rstudio` installed you can select `Tools` \>\> `Global options` and configure your preferences e.g. `apperance`.
 
 ### Install `R` packages used for the examples
+
 ```{r,eval=FALSE}
 pkgs <-
   c(

@@ -4,7 +4,7 @@
     "href": "R_studio.html",
     "title": "1  Rstudio",
     "section": "",
-    "text": "DALL·E 2023-04-12 20.55.50 - hacker unicorn writing R code using the Rstudio IDE, cyberpunk\n\n\nRstudio is one the most comprehensive free interactive development environments (IDE) for R.\nThe following reference covers he major steps to install and configure your R studio.\nMajor steps include:\n\ninstall the latest version of R\ninstall Rstudio\nconfigure Rstudio defaults and appearance\n\nOnce you have Rstudio installed you can select Tools >> Global options and configure your preferences e.g. apperance."
+    "text": "chatGPT 4 04/24 - hacker unicorn writing R code using the Rstudio IDE, cyberpunk\n\n\nRstudio is one the most comprehensive free interactive development environments (IDE) for R.\nThe following reference covers he major steps to install and configure your R studio.\nMajor steps include:\n\ninstall the latest version of R\ninstall Rstudio\nconfigure Rstudio defaults and appearance\n\nOnce you have Rstudio installed you can select Tools &gt;&gt; Global options and configure your preferences e.g. apperance.\n\n1.0.1 Install R packages used for the examples\n\npkgs &lt;-\n  c(\n    'dplyr',\n    'tidyr',\n    'datasets',\n    'skimr',\n    'summarytools',\n    'ggplot2',\n    'ggrepel',\n    'reshape2',\n    'GGally',\n    'plotly',\n    'RColorBrewer',\n    'pheatmap',\n    'purrr',\n    'heatmaply',\n    'car',\n    'ggalt',\n    'Metrics',\n    'patchwork',\n    'htmltools',\n    'formattable',\n    'DT'\n  )\ninstall.packages(pkgs)"
   },
   {
     "objectID": "openapi.html",

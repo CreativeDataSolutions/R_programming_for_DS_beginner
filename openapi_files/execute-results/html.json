@@ -1,0 +1,14 @@
+{
+  "hash": "135c745481753c39a5e8887918dd4372",
+  "result": {
+    "markdown": "# AI coding help\n\n\n::: {.cell}\n\n:::\n\n\nThere is a lot of hype around tools like `chatGPT` which is a class of `large language models` (`LLM's`) for using`natural language` inputs to answer questions, including how to write code.\n\n![](imgs/openai.png)\n\n## Install chatGPT `Rstudio add in`\n\n### Prerequisites\n\n-   Make an [OpenAI](http://chat.openai.com/) account.\n-   Create an [OpenAI API key](https://platform.openai.com/account/api-keys) to use with the package.\n-   Set the API key up in Rstudio\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# install.packages(c(\"gptstudio\",\"waiter\"))\n# library(gptstudio)\n```\n:::\n\n\n## `chatGPT` Rstudio add in\n\n![](imgs/openai_addin.png)\n\nTry to ask the `openAI` `LLM` how it would code up some of the examples you have seen so far. Try running the code, giving feedback about any errors to the `chatbot` and see if you can customize and/or improve the code you have seen so far.\n\n## Appendix\n\n-   [gptstudio](https://michelnivard.github.io/gptstudio/)\n-   [OpenAI](http://chat.openai.com/)\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
