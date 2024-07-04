@@ -66,9 +66,10 @@ Next lets introduce a more readable way to link `R` functions. We will use the p
 #lets format the meant miles per gallon to two digits
 round(mean(mtcars$mpg),2)
 
+
 # we can rewrite this as a pipe where x %>% f(.) is equivalent to f(x). The '.' can be implicit or used to denote the 'x' on the left side of the equation.
 mtcars$mpg %>% 
-  mean(.) %>%
+  sd(.) %>%
   round(.,2)
 
 ```
@@ -78,8 +79,9 @@ Note `%>%` can be imported in different ways and depends on the `magrittr` libra
 We can use the `R package` `dplyr` to create a custom summary. Lets calculate the mean and standard deviation of each column.
 
 ```{r}
-my_summary<-mtcars %>%
-  summarise_each(., funs(mean,stdev=sd))
+
+my_summary <- mtcars %>%
+  summarise(across(everything(), list(mean = mean, stdev = sd)))
 
 my_summary
 ```
@@ -194,7 +196,7 @@ Next, lets repeat our column summary calculation using a `for` `loop`.
 ```{r}
 results<-list() #initialize an empty list to store results in. Note it is more efficient to make a list of the same length as the number of elements you want to store.
 for (i in 1:ncol(mtcars)){
-  
+  # print(i) # see iterated variable value
   results$mean[i]<-mtcars[,i] %>%
     mean() # store results in position [i] in the list results element named 'mean'
   results$sd[i]<-mtcars[,i] %>%
@@ -246,11 +248,12 @@ column_summary<-function(data,functions = c(mean=mean,stdev=sd)){
 #we can explicitly pass column names we want to separate or infer based on suffix
 #2 A. infer common suffix
 get_unique_suffix<-function(data,sep='_'){
-  tmp<-colnames(data) %>%  #get column names
+  colnames(data) %>%  #get column names
   strsplit(.,'_') %>% #split string on '_''
   do.call('rbind',.) %>% # combine list elements row wise
   .[,2] %>% #get second column, better to reference by name
   unique() #get unique values
+
 }
 
 #test 2 A
@@ -319,18 +322,23 @@ tmp %>%
 #   transpose_on_suffix(.) # our original function needs to keep track of grouping variable levels. An easy solution is not obvious.
 ```
 
-## Reshaping 
+## Reshaping
+
 Reshaping is the act of changing data structure between `long` and `wide` formats. We might call the conversion from `wide` to `long` as `melt`ing and from `long` to `wide` as `pivoting` or `casting` our data. These operations are particularly useful for data visualization. Lets briefly take a look at some examples below.
 
-In a `wide` format every row represents a unique sample and columns are the samples descriptors or measurements. 
+In a `wide` format every row represents a unique sample and columns are the samples descriptors or measurements.
 
 ```{r}
 head(mtcars)# wide
 ```
+
 We can transform this into a `long` format wherein we have multiple rows per sample.
 
 ```{r}
-library(reshape2)
+if(!require('reshape2')) {
+  install.packages('reshape2')
+  library('reshape2', character.only = TRUE)
+}
 
 #add our sample index to the data ... note alternative functions can do this automatically
 
@@ -340,11 +348,16 @@ df$name<-row.names(df)
 melted_df <-melt(df,id.vars = 'name')
 head(melted_df)
 ```
+
 We will explore why and how this is useful in the upcoming lessons. For now lets convert the `long` data to a `wide` format.
 
 ```{r}
 head(dcast(melted_df,name ~ variable)) # this uses a formula (e.g. 'name ~ variable') which we will explore in a later section
 ```
+
+## Joining or combining data
+
+The [`dplyr`](https://dplyr.tidyverse.org/) package provides [many methods](https://r4ds.hadley.nz/joins#how-do-joins-work) for combining data frames based on common indices.
 
 ## Error handling
 
@@ -410,6 +423,9 @@ f<-function(x){
 # debug(f) # uncomment to run
 
 f(2)
+
+#wehn you are done
+undebug(f)
 ```
 
 ## Reproducing randomness
@@ -435,7 +451,7 @@ f()
 f(2) # different random seed
 f(2) 
 
-#can also be used to set the global seed
+#can also be used to set the global seed -- show loop example
 set.seed(1)
 c(rnorm(1),rnorm(1)) 
 set.seed(2)

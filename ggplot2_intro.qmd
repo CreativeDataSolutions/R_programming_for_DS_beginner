@@ -541,7 +541,19 @@ patchwork + plot_annotation(
 
 ```
 
+## Interactive plotting
+
+There are a variety of apps providing user interfaces to interactively build `ggplot2` plots. For example [esquisse](https://dreamrs.github.io/esquisse/).
+
+```{r,eval=FALSE}
+# install.packages("esquisse")
+library('esquisse')
+
+esquisse::esquisser(mtcars)
+```
+
 ## Appendix
 
 -   [ggplot2 cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf)
 -   [ggplot2 tutorial](http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html)
+-   [ggplot2 plotting UI](https://dreamrs.github.io/esquisse/)

@@ -1,0 +1,16 @@
+---
+title: Reproducible reports
+author: Your name goes here
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+
+
+```{r,echo = FALSE}
+plot(mtcars$mpg,mtcars$cyl)
+
+foo<-'bar'
+```
+
+
+# Foo == `r foo`!
